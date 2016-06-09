@@ -1,0 +1,12 @@
+language: ruby
+
+rvm:
+  - 2.3.1
+
+sudo: false
+
+env:
+  - PURE_RUBY=1
+  - KITCHEN_SINK=1
+
+script: bundle exec rake

@@ -1,0 +1,15 @@
+version: '2'
+services:
+  app:
+    build: .
+    command: rspec
+    volumes:
+      - .:/app
+      - ~/.aws:/root/.aws
+    links:
+      - dynamodb
+
+  dynamodb:
+    image: ryanratcliff/dynamodb:latest
+    ports:
+      - 8000
