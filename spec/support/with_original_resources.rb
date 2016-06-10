@@ -1,3 +1,5 @@
+require 'with_dynamodb_table'
+
 RSpec.shared_context 'with original_resources' do
   include_context 'with dynamodb table',
     OriginalResource.table_name,

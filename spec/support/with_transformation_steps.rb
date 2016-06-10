@@ -1,3 +1,5 @@
+require 'with_dynamodb_table'
+
 RSpec.shared_context 'with transformation_steps' do
   include_context 'with dynamodb table',
     TransformationStep.table_name,
