@@ -1,5 +1,3 @@
-require 'dynamodb'
-
 RSpec.shared_context 'with dynamodb table' do |table_name, opts|
   before(:all) do
     LteCore::DynamoDB::Connection.setup(
