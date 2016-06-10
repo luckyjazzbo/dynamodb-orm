@@ -6,6 +6,8 @@ require 'lte_core/dynamodb/errors'
 
 module LteCore
   module DynamoDB
+    RACK_ENV ||= ENV['RACK_ENV'] || 'development'
+
     autoload :Connection, 'lte_core/dynamodb/connection'
     autoload :Model,      'lte_core/dynamodb/model'
     autoload :Chain,      'lte_core/dynamodb/chain'

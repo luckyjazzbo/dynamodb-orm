@@ -29,6 +29,8 @@ Check specs for examples.
 
 Gem provides helper to create DynamoDB table which will be dropped after specs:
 ```ruby
+require 'with_dynamodb_table'
+
 RSpec.describe Movie do
   include_context 'with dynamodb table',
     Movie.table_name,
@@ -45,6 +47,6 @@ end
 
 **Shortcuts for exists tables:**
 
- - include_context 'with original_resources'
- - include_context 'with transformation_steps'
- - include_context 'with transformed_resources'
+ - require 'with_original_resources'
+ - require 'with_transformation_steps'
+ - require 'with_transformed_resources'
