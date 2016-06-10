@@ -10,13 +10,13 @@ gem 'lte-core-dynamodb'
 
 ```ruby
 class Movie
-  include LteCore::DynamoDB::Model
+  include Mes::Dynamo::Model
 
   # Optional:
   table name: :sample_table, primary_key: 'custom_id'
   field :title
 
-  include LteCore::DynamoDB::Timestamps
+  include Mes::Dynamo::Timestamps
   # To get for free with auto-assigns
   # field :created_at
   # field :updated_at

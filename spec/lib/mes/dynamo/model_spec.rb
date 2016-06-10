@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe LteCore::DynamoDB::Model do
+RSpec.describe Mes::Dynamo::Model do
   include_context 'with dynamodb table',
     :movies,
     attribute_definitions: [{
@@ -13,7 +13,7 @@ RSpec.describe LteCore::DynamoDB::Model do
     }]
 
   class Movie
-    include LteCore::DynamoDB::Model
+    include Mes::Dynamo::Model
     field :title
   end
 
@@ -23,7 +23,7 @@ RSpec.describe LteCore::DynamoDB::Model do
 
   describe '#primary_key' do
     class TableWithCustomPrimaryKey
-      include LteCore::DynamoDB::Model
+      include Mes::Dynamo::Model
       table primary_key: 'custom_id'
     end
 
@@ -89,7 +89,7 @@ RSpec.describe LteCore::DynamoDB::Model do
       it 'raises exception' do
         expect {
           movie.save!
-        }.to raise_error LteCore::DynamoDB::GenericError
+        }.to raise_error Mes::Dynamo::GenericError
       end
     end
   end
@@ -154,7 +154,7 @@ RSpec.describe LteCore::DynamoDB::Model do
 
     context 'when is assigned' do
       class FunnyMovie
-        include LteCore::DynamoDB::Model
+        include Mes::Dynamo::Model
         table name: 'custom_table_name'
       end
 
@@ -192,7 +192,7 @@ RSpec.describe LteCore::DynamoDB::Model do
       it 'throws exception' do
         expect {
           Movie.find!('no-such-record')
-        }.to raise_error(LteCore::DynamoDB::RecordNotFound)
+        }.to raise_error(Mes::Dynamo::RecordNotFound)
       end
     end
   end
@@ -200,13 +200,13 @@ RSpec.describe LteCore::DynamoDB::Model do
   describe '.count' do
     context 'when table does not exist' do
       class ModelWithNoTable
-        include LteCore::DynamoDB::Model
+        include Mes::Dynamo::Model
       end
 
       it 'raise exception' do
         expect {
           ModelWithNoTable.count
-        }.to raise_error(LteCore::DynamoDB::TableDoesNotExist)
+        }.to raise_error(Mes::Dynamo::TableDoesNotExist)
       end
     end
   end

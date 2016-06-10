@@ -47,7 +47,7 @@ module DynamoDBSpecHelpers
   private
 
   def client
-    LteCore::DynamoDB::Connection.connect
+    Mes::Dynamo::Connection.connect
   end
 
   def check_schema(array)

@@ -1,5 +1,5 @@
-module LteCore
-  module DynamoDB
+module Mes
+  module Dynamo
     GenericError        = Class.new(StandardError)
     AttributeNotDefined = Class.new(GenericError)
     RecordNotFound      = Class.new(GenericError)

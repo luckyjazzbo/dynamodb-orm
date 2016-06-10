@@ -1,5 +1,5 @@
-module LteCore
-  module DynamoDB
+module Mes
+  module Dynamo
     class Chain
       include Enumerable
 

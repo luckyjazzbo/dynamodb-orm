@@ -1,7 +1,7 @@
 require 'bundler/setup'
 Bundler.setup
 
-require 'lte_core/dynamodb'
+require 'mes/dynamo'
 
 RACK_ENV = 'test' unless defined?(RACK_ENV)
 require 'webmock/rspec'

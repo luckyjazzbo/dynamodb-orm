@@ -1,5 +1,5 @@
-module LteCore
-  module DynamoDB
+module Mes
+  module Dynamo
     module Connection
       def setup(options)
         @options = options

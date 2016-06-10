@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe LteCore::DynamoDB::Callbacks do
+RSpec.describe Mes::Dynamo::Callbacks do
   include_context 'with dynamodb table',
     :sample_table,
     attribute_definitions: [{
@@ -14,7 +14,7 @@ RSpec.describe LteCore::DynamoDB::Callbacks do
 
   context 'before_create' do
     class ModelWithBeforeCreateCallback
-      include LteCore::DynamoDB::Model
+      include Mes::Dynamo::Model
       table name: :sample_table
       field :counter
 
@@ -34,7 +34,7 @@ RSpec.describe LteCore::DynamoDB::Callbacks do
 
   context 'before_save' do
     class ModelWithBeforeSaveCallback
-      include LteCore::DynamoDB::Model
+      include Mes::Dynamo::Model
       table name: :sample_table
       field :counter
 
@@ -54,8 +54,8 @@ RSpec.describe LteCore::DynamoDB::Callbacks do
 
   context 'timestamps' do
     class ModelWithTimestamps
-      include LteCore::DynamoDB::Model
-      include LteCore::DynamoDB::Timestamps
+      include Mes::Dynamo::Model
+      include Mes::Dynamo::Timestamps
       table name: :sample_table
       field :title
     end

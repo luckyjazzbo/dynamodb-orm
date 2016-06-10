@@ -1,6 +1,6 @@
 class OriginalResource
-  include LteCore::DynamoDB::Model
-  include LteCore::DynamoDB::Timestamps
+  include Mes::Dynamo::Model
+  include Mes::Dynamo::Timestamps
 
   table name: "lte-document-store-#{RACK_ENV}", primary_key: :uuid
 

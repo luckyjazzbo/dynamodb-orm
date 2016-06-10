@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe LteCore::DynamoDB::Chain do
+RSpec.describe Mes::Dynamo::Chain do
   include_context 'with dynamodb table',
     :movies,
     attribute_definitions: [{
@@ -30,7 +30,7 @@ RSpec.describe LteCore::DynamoDB::Chain do
     }]
 
   class Movie
-    include LteCore::DynamoDB::Model
+    include Mes::Dynamo::Model
     field :title
   end
 
@@ -106,7 +106,7 @@ RSpec.describe LteCore::DynamoDB::Chain do
         it 'returns last item' do
           expect {
             subject.first.title
-          }.to raise_error LteCore::DynamoDB::InvalidQuery
+          }.to raise_error Mes::Dynamo::InvalidQuery
         end
       end
 
@@ -134,7 +134,7 @@ RSpec.describe LteCore::DynamoDB::Chain do
         it 'returns last item' do
           expect {
             subject.last.title
-          }.to raise_error LteCore::DynamoDB::InvalidQuery
+          }.to raise_error Mes::Dynamo::InvalidQuery
         end
       end
 

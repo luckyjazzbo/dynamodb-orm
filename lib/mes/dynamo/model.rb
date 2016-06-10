@@ -1,5 +1,5 @@
-module LteCore
-  module DynamoDB
+module Mes
+  module Dynamo
     module Model
       attr_reader :attributes
 
@@ -49,7 +49,7 @@ module LteCore
 
       def save
         save!
-      rescue DynamoDB::GenericError
+      rescue Dynamo::GenericError
         false
       end
 

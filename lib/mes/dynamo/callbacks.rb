@@ -1,5 +1,5 @@
-module LteCore
-  module DynamoDB
+module Mes
+  module Dynamo
     module Callbacks
       def before_create(&block)
         store_callback(:before_create, block)

@@ -1,6 +1,6 @@
 class TransformedResource
-  include LteCore::DynamoDB::Model
-  include LteCore::DynamoDB::Timestamps
+  include Mes::Dynamo::Model
+  include Mes::Dynamo::Timestamps
 
   table name: "lte-document-versions-store-#{RACK_ENV}", primary_key: :content_id
 
