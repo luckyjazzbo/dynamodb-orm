@@ -1,6 +1,6 @@
 RSpec.shared_context 'with transformation_steps' do
   include_context 'with dynamodb table',
-    TransformationStep.table_name,
+    Mes::TransformationStep.table_name,
     attribute_definitions: [{
       attribute_name: 'uuid',
       attribute_type: 'S'

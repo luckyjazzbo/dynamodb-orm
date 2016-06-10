@@ -8,9 +8,9 @@ require 'mes/dynamo/timestamps'
 require 'mes/dynamo/callbacks'
 
 # Models
-require 'models/original_resource'
-require 'models/transformation_step'
-require 'models/transformed_resource'
+require 'models/mes/original_resource'
+require 'models/mes/transformation_step'
+require 'models/mes/transformed_resource'
 
 require "mes/dynamo/version"
 require 'mes/dynamo/errors'
