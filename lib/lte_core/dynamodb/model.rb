@@ -4,7 +4,7 @@ module LteCore
       attr_reader :attributes
 
       def initialize(attrs = {}, opts = {})
-        @attributes = attrs.stringify_keys || {}
+        @attributes = (attrs || {}).stringify_keys
         @persisted = opts.fetch(:persisted, false)
       end
 
@@ -44,11 +44,11 @@ module LteCore
         cls.run_callbacks(self, :before_create) unless persisted?
         cls.run_callbacks(self, :before_save)
         cls.client_execute(:put_item, item: attributes)
+        @persisted = true
       end
 
       def save
         save!
-        @persisted = true
       rescue DynamoDB::GenericError
         false
       end
