@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require 'mes/dynamo/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "lte-core-dynamodb"
+  spec.name          = "mes-dynamo"
   spec.version       = Mes::Dynamo::VERSION
   spec.authors       = ["Roman Lupiichuk", "Oleg Keene"]
   spec.email         = ["ol.keene@gmail.com"]
