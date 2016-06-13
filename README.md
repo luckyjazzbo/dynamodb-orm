@@ -17,15 +17,13 @@ class Movie
   field :title
 
   include Mes::Dynamo::Timestamps
-  # To get for free with auto-assigns
-  # field :created_at
-  # field :updated_at
+  # To get created_at and updated_at with auto-assigns
 end
 ```
 
 Check specs for examples.
 
-## Specs helpers
+## Spec helpers
 
 Gem provides helper to create DynamoDB table which will be dropped after specs:
 ```ruby
@@ -43,13 +41,14 @@ RSpec.describe Movie do
 end
 ```
 
-**Shortcuts for exists tables:**
+**Shortcuts for existing tables:**
 
- - include_context 'with original_resources'
- - include_context 'with transformation_steps'
- - include_context 'with transformed_resources'
+ - `include_context 'with original_resources'`
+ - `include_context 'with transformation_steps'`
+ - `include_context 'with transformed_resources'`
 
 ## Running tests
 ```sh
+docker-compose up -d
 docker-compose run app rspec
 ```
