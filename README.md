@@ -3,7 +3,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'mes-dynamo', git: 'git@github.com:glomex/mes-dynamo.git', require: 'mes/dynamo'
+gem 'mes-dynamo', git: 'git@github.com:glomex/mes-dynamo.git'
 ```
 
 ## Usage
@@ -17,7 +17,7 @@ class Movie
   field :title
 
   include Mes::Dynamo::Timestamps
-  # To get created_at and updated_at with auto-assigns
+  # Adds created_at and updated_at with auto-assigns
 end
 ```
 

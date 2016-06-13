@@ -1,12 +1,12 @@
 # coding: utf-8
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
 require 'mes/dynamo/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "mes-dynamo"
+  spec.name          = 'mes-dynamo'
   spec.version       = Mes::Dynamo::VERSION
-  spec.authors       = ["Roman Lupiichuk", "Oleg Keene"]
-  spec.email         = ["ol.keene@gmail.com"]
+  spec.authors       = ['Roman Lupiichuk', 'Oleg Keene']
+  spec.email         = ['ol.keene@gmail.com']
 
   spec.summary       = %q{Core classes to interact with DynamoDB}
 
@@ -16,8 +16,9 @@ Gem::Specification.new do |spec|
 
   spec.licenses = ['MIT']
 
-  spec.add_development_dependency "bundler", "~> 1.10"
-  spec.add_development_dependency "rake",    "~> 10.0"
-  spec.add_development_dependency 'activesupport', '~> 4.2'
-  spec.add_development_dependency 'aws-sdk', '~> 2'
+  spec.add_dependency 'activesupport', '~> 4.2'
+  spec.add_dependency 'aws-sdk', '~> 2'
+
+  spec.add_development_dependency 'bundler', '~> 1.10'
+  spec.add_development_dependency 'rake', '~> 10.0'
 end
