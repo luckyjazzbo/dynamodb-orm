@@ -61,7 +61,6 @@ module Mes
       def first
         dup.tap do |chain|
           chain.limit_of_results = 1
-          chain.direction = 'asc'
         end.to_a.first
       end
 
@@ -70,7 +69,7 @@ module Mes
 
         dup.tap do |chain|
           chain.limit_of_results = 1
-          chain.direction = 'desc'
+          chain.reverse_order
         end.to_a.first
       end
 
@@ -154,7 +153,7 @@ module Mes
 
       def execute(extra_options = {})
         options = filter_options.merge(extra_options)
-        if @is_scan
+        if scan?
           model_class.client_execute(:scan, options)
         else
           model_class.client_execute(:query, options)
@@ -163,6 +162,10 @@ module Mes
 
       def logger
         ::Mes::Dynamo.logger
+      end
+
+      def reverse_order
+        self.direction = (direction == 'asc') ? 'desc' : 'asc'
       end
     end
   end
