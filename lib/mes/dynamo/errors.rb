@@ -1,6 +1,26 @@
 module Mes
   module Dynamo
-    GenericError        = Class.new(StandardError)
+    class GenericError < StandardError
+      def self.mes_error_for(origin_error = nil)
+        error = mes_error_class_for(origin_error).new(origin_error.message)
+        error.set_backtrace(origin_error.backtrace)
+        error
+      end
+
+      def self.mes_error_class_for(origin_error)
+        case origin_error
+        when Aws::DynamoDB::Errors::ResourceNotFoundException
+          TableDoesNotExist
+        when Aws::DynamoDB::Errors::ValidationException
+          if origin_error.message.include? 'ExpressionAttributeValues'
+            InvalidQuery
+          else
+            ValidationError
+          end
+        end
+      end
+    end
+
     AttributeNotDefined = Class.new(GenericError)
     RecordNotFound      = Class.new(GenericError)
     ValidationError     = Class.new(GenericError)

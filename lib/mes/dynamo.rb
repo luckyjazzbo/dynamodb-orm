@@ -7,17 +7,22 @@ require 'mes/dynamo/model'
 require 'mes/dynamo/timestamps'
 require 'mes/dynamo/callbacks'
 
-# Models
 require 'models/mes/original_resource'
 require 'models/mes/transformation_step'
 require 'models/mes/transformed_resource'
 
-require "mes/dynamo/version"
+require 'mes/dynamo/version'
 require 'mes/dynamo/errors'
 
 module Mes
   module Dynamo
     autoload :Connection, 'mes/dynamo/connection'
     autoload :Chain,      'mes/dynamo/chain'
+
+    cattr_writer :logger
+
+    def self.logger
+      @logger ||= Logger.new('/dev/null')
+    end
   end
 end

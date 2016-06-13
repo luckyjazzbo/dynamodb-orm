@@ -1,6 +1,8 @@
 module Mes
   module Dynamo
     module Model
+      include Enumerable
+
       attr_reader :attributes
 
       def initialize(attrs = {}, opts = {})
@@ -96,6 +98,9 @@ module Mes
                     :primary_key,
                     :fields
 
+        delegate :where, :index, to: :chain
+        delegate :each, :first, to: :chain_with_scan
+
         def table(opts = {})
           @table_name = opts.fetch(:name, name.tableize).to_s
           @primary_key = opts.fetch(:primary_key, 'content_id').to_s
@@ -121,27 +126,21 @@ module Mes
           end
         end
 
-        def where(*args)
-          chain.where(*args)
-        end
-
         def count
           client_execute(:describe_table, {}).table.item_count
         end
 
-        def chain
-          Chain.new(self)
+        def chain(opts = {})
+          Chain.new(self, opts)
         end
 
+        def chain_with_scan
+          chain(scan: true)
+        end
+        private :chain_with_scan
+
         def truncate!
-          response = client_execute(
-            :scan,
-            attributes_to_get: [primary_key],
-            select: 'SPECIFIC_ATTRIBUTES'
-          )
-          response.items.each do |item|
-            client_execute(:delete_item, key: { primary_key => item[primary_key] })
-          end
+          each(&:delete)
         end
 
         def client
@@ -150,21 +149,18 @@ module Mes
 
         def client_execute(method, opts)
           default_options = { table_name: table_name }
+          final_options = default_options.merge(opts)
+          ::Mes::Dynamo.logger.debug "Request: #{final_options.inspect}"
+
           execute do
-            client.send method, default_options.merge(opts)
+            client.send method, final_options
           end
         end
 
         def execute(&block)
           instance_exec(&block)
-        rescue Aws::DynamoDB::Errors::ResourceNotFoundException => origin_error
-          error = TableDoesNotExist.new(origin_error.message)
-          error.set_backtrace(origin_error.backtrace)
-          raise error
-        rescue Aws::DynamoDB::Errors::ValidationException => origin_error
-          error = ValidationError.new(origin_error.message)
-          error.set_backtrace(origin_error.backtrace)
-          raise error
+        rescue Aws::DynamoDB::Errors::ServiceError => origin_error
+          raise Mes::Dynamo::GenericError.mes_error_for(origin_error)
         end
       end
     end

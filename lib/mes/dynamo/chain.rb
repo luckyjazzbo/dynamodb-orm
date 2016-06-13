@@ -11,11 +11,16 @@ module Mes
                     :select_fields,
                     :custom_options
 
-      def initialize(model_class)
+      def initialize(model_class, opts = {})
         @model_class = model_class
+        @is_scan = opts[:scan]
         @filters = []
         @direction = 'asc'
         @custom_options = {}
+      end
+
+      def scan?
+        @is_scan
       end
 
       def raw(opts)
@@ -56,20 +61,33 @@ module Mes
       def first
         dup.tap do |chain|
           chain.limit_of_results = 1
-          chain.direction = 'asc'
         end.to_a.first
       end
 
       def last
+        raise InvalidQuery, 'Ordering is not supported in scan mode' if scan?
+
         dup.tap do |chain|
           chain.limit_of_results = 1
-          chain.direction = 'desc'
+          chain.reverse_order
         end.to_a.first
       end
 
       def each
-        execute.items.each do |item_attrs|
-          yield model_class.new(item_attrs)
+        extra_options = {}
+        total = 0
+        loop do
+          response = execute(extra_options)
+          total += response.count
+
+          response.items.each do |item_attrs|
+            yield model_class.new(item_attrs)
+          end
+
+          break if limit_of_results.present? && total >= limit_of_results
+          break if response.last_evaluated_key.nil?
+          extra_options[:exclusive_start_key] = response.last_evaluated_key
+          logger.debug "Reached 1Mb limit on #{response.last_evaluated_key} row, continuing"
         end
       end
 
@@ -86,7 +104,7 @@ module Mes
         values.map { |key, value| "#{key} = :#{key}" }.join(' AND ')
       end
 
-      def key_condition_expression
+      def filter_expression
         filters.map { |filter| filter[:expression] }.join(' AND ')
       end
 
@@ -100,12 +118,8 @@ module Mes
         values
       end
 
-      def query_options
-        opts = {
-          key_condition_expression:    key_condition_expression,
-          expression_attribute_values: expression_attribute_values,
-          scan_index_forward:          (direction == 'asc')
-        }
+      def filter_options
+        opts = scan? ? scan_only_options : query_only_options
         opts[:index_name] = index_name  if index_name.present?
         opts[:limit] = limit_of_results if limit_of_results.present?
 
@@ -118,18 +132,40 @@ module Mes
         opts.merge(custom_options)
       end
 
-      def execute
-        if valid_query_options?
-          model_class.client_execute(:query, query_options)
+      def query_only_options
+        {
+          key_condition_expression: filter_expression,
+          expression_attribute_values: expression_attribute_values,
+          scan_index_forward: (direction == 'asc')
+        }
+      end
+
+      def scan_only_options
+        if filter_expression.present?
+          {
+            filter_expression: filter_expression,
+            expression_attribute_values: expression_attribute_values
+          }
         else
-          raise InvalidQuery, 'You must set an index and a filter'
+          {}
         end
       end
 
-      def valid_query_options?
-        index_name.present? &&
-          key_condition_expression.present? &&
-          expression_attribute_values.present?
+      def execute(extra_options = {})
+        options = filter_options.merge(extra_options)
+        if scan?
+          model_class.client_execute(:scan, options)
+        else
+          model_class.client_execute(:query, options)
+        end
+      end
+
+      def logger
+        ::Mes::Dynamo.logger
+      end
+
+      def reverse_order
+        self.direction = (direction == 'asc') ? 'desc' : 'asc'
       end
     end
   end
