@@ -25,7 +25,7 @@ end
 
 Check specs for examples.
 
-## Specs
+## Specs helpers
 
 Gem provides helper to create DynamoDB table which will be dropped after specs:
 ```ruby
@@ -48,3 +48,8 @@ end
  - include_context 'with original_resources'
  - include_context 'with transformation_steps'
  - include_context 'with transformed_resources'
+
+## Running tests
+```sh
+docker-compose run app rspec
+```
