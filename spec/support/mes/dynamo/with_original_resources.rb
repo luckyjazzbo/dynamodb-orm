@@ -1,5 +1,6 @@
 RSpec.shared_context 'with original_resources' do
-  include_context 'with dynamodb table',
+  include_context(
+    'with dynamodb table',
     Mes::OriginalResource.table_name,
     attribute_definitions: [{
       attribute_name: 'uuid', attribute_type: 'S'
@@ -24,4 +25,5 @@ RSpec.shared_context 'with original_resources' do
         write_capacity_units: 1
       }
     }]
+  )
 end

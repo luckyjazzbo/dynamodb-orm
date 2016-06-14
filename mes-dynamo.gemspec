@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Roman Lupiichuk', 'Oleg Keene']
   spec.email         = ['ol.keene@gmail.com']
 
-  spec.summary       = %q{Core classes to interact with DynamoDB}
+  spec.summary       = 'Core classes to interact with DynamoDB'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

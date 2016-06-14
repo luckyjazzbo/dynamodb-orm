@@ -101,7 +101,7 @@ module Mes
       end
 
       def build_expression_from_values(values)
-        values.map { |key, value| "#{key} = :#{key}" }.join(' AND ')
+        values.map { |key, _| "#{key} = :#{key}" }.join(' AND ')
       end
 
       def filter_expression

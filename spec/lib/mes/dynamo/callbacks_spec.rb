@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Mes::Dynamo::Callbacks do
-  include_context 'with dynamodb table',
+  include_context \
+    'with dynamodb table',
     :sample_table,
     attribute_definitions: [{
       attribute_name: 'content_id',
