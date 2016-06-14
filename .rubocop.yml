@@ -1,0 +1,11 @@
+Style/HashSyntax:
+  EnforcedStyle: ruby19
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 100

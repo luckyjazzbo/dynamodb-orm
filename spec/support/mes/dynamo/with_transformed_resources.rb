@@ -1,5 +1,6 @@
 RSpec.shared_context 'with transformed_resources' do
-  include_context 'with dynamodb table',
+  include_context(
+    'with dynamodb table',
     Mes::TransformedResource.table_name,
     attribute_definitions: [{
       attribute_name: 'content_id', attribute_type: 'S'
@@ -7,4 +8,5 @@ RSpec.shared_context 'with transformed_resources' do
     key_schema: [{
       attribute_name: 'content_id', key_type: 'HASH'
     }]
+  )
 end

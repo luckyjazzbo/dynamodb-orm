@@ -1,5 +1,6 @@
 RSpec.shared_context 'with transformation_steps' do
-  include_context 'with dynamodb table',
+  include_context(
+    'with dynamodb table',
     Mes::TransformationStep.table_name,
     attribute_definitions: [{
       attribute_name: 'uuid',
@@ -26,4 +27,5 @@ RSpec.shared_context 'with transformation_steps' do
         write_capacity_units: 1
       }
     }]
+  )
 end

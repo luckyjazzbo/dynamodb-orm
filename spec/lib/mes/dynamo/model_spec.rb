@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Mes::Dynamo::Model do
-  include_context 'with dynamodb table',
+  include_context \
+    'with dynamodb table',
     :movies,
     attribute_definitions: [{
       attribute_name: 'content_id',
@@ -39,7 +40,7 @@ RSpec.describe Mes::Dynamo::Model do
 
     it 'returns updated attributes' do
       movie.title = title
-      expect(movie.attributes).to eq({ 'title' => title })
+      expect(movie.attributes).to eq('title' => title)
     end
   end
 
@@ -79,17 +80,17 @@ RSpec.describe Mes::Dynamo::Model do
       end
 
       it 'saves new object' do
-        expect {
+        expect do
           movie.save!
-        }.to change { Movie.count }.by(1)
+        end.to change { Movie.count }.by(1)
       end
     end
 
     context 'when cannot be saved' do
       it 'raises exception' do
-        expect {
+        expect do
           movie.save!
-        }.to raise_error Mes::Dynamo::GenericError
+        end.to raise_error Mes::Dynamo::GenericError
       end
     end
   end
@@ -164,12 +165,12 @@ RSpec.describe Mes::Dynamo::Model do
 
   describe '.create!' do
     it 'creates record' do
-      expect {
+      expect do
         Movie.create!(
           content_id: 'v-create!',
           title: title
         )
-      }.to change { Movie.count }.by(1)
+      end.to change { Movie.count }.by(1)
     end
   end
 
@@ -190,9 +191,9 @@ RSpec.describe Mes::Dynamo::Model do
 
     context 'when document does not exist' do
       it 'throws exception' do
-        expect {
+        expect do
           Movie.find!('no-such-record')
-        }.to raise_error(Mes::Dynamo::RecordNotFound)
+        end.to raise_error(Mes::Dynamo::RecordNotFound)
       end
     end
   end
@@ -204,9 +205,9 @@ RSpec.describe Mes::Dynamo::Model do
       end
 
       it 'raise exception' do
-        expect {
+        expect do
           ModelWithNoTable.count
-        }.to raise_error(Mes::Dynamo::TableDoesNotExist)
+        end.to raise_error(Mes::Dynamo::TableDoesNotExist)
       end
     end
   end

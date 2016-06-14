@@ -1,16 +1,17 @@
+ENV['DYNAMODB_ENDPOINT'] = 'http://dynamodb:8000'
+RACK_ENV = 'test'.freeze unless defined?(RACK_ENV)
+
 require 'bundler/setup'
 Bundler.setup
 
 require 'mes/dynamo'
-
-RACK_ENV = 'test' unless defined?(RACK_ENV)
 require 'webmock/rspec'
 
-WebMock.disable_net_connect!(allow: ENV.fetch('DYNAMODB_ENDPOINT', 'http://dynamodb:8000'))
+WebMock.disable_net_connect!(allow: ENV['DYNAMODB_ENDPOINT'])
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
