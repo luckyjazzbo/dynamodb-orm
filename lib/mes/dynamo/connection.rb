@@ -6,9 +6,10 @@ module Mes
       end
 
       def default_options
-        {
-          region: 'eu-west-1'
-        }
+        options = {
+          region:  'eu-west-1',
+          endpoint: ENV['DYNAMODB_ENDPOINT'].presence
+        }.reject{|k,v| !v }
       end
 
       def connect
