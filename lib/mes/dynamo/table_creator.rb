@@ -17,7 +17,6 @@ module Mes
         if global_secondary_indexes.present?
           table_settings[:global_secondary_indexes] = global_secondary_indexes
         end
-
         client.create_table(table_settings)
       end
 
@@ -42,32 +41,26 @@ module Mes
       end
 
       def global_secondary_indexes
-        model_class.indices.map do |index_settings|
+        model_class.indices.map do |index|
           {
-            index_name: index_settings[:name] || index_name(index_settings[:fields]),
-            key_schema: index_key_schema(index_settings[:fields]),
+            index_name: index.name,
+            key_schema: key_schema_for(index),
             projection: { projection_type: 'ALL' },
             provisioned_throughput: index_provisioned_throughput
           }
         end
       end
 
-      def index_name(fields)
-        fields.map(&:to_s).join('_') + '_index'
-      end
-
-      def index_key_schema(fields)
-        fields.map do |field|
-          {
-            attribute_name: field.to_s,
-            key_type: 'HASH'
-          }
+      def key_schema_for(index)
+        key_schema = [{ attribute_name: index.hash.to_s, key_type: 'HASH' }]
+        index.range.each do |field|
+          key_schema << { attribute_name: field.to_s, key_type: 'RANGE' }
         end
+        key_schema
       end
 
-      def field_used_in_indices?(field_name)
-        field_name = field_name.to_sym
-        model_class.indices.any? { |index| index[:fields].include?(field_name) }
+      def field_used_in_indices?(field)
+        model_class.indices.any? { |index| index.all_fields.include?(field.to_sym) }
       end
 
       def table_provisioned_throughput

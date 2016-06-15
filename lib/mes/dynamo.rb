@@ -11,7 +11,10 @@ require 'mes/dynamo/model/crud_actions'
 require 'mes/dynamo/model/callbacks'
 require 'mes/dynamo/model'
 require 'mes/dynamo/timestamps'
+require 'mes/dynamo/table_index'
 require 'mes/dynamo/table_creator'
+
+require 'helpers/partition_helper'
 
 require 'models/mes/original_resource'
 require 'models/mes/transformation_step'

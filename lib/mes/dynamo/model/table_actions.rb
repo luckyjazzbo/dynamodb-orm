@@ -15,16 +15,15 @@ module Mes
       end
 
       def field(name, opts = {})
-        fields[name.to_s] = opts
+        fields[name.to_sym] = opts
       end
 
       def fields
-        @fields ||= {}
+        @fields ||= {}.with_indifferent_access
       end
 
-      def index(field_or_array, opts = {})
-        fields = field_or_array.respond_to?(:each) ? field_or_array.map(&:to_sym) : [field_or_array.to_sym]
-        indices << opts.merge(fields: fields)
+      def index(hash_field, settings = {})
+        indices << TableIndex.new(hash_field, settings)
       end
 
       def indices
