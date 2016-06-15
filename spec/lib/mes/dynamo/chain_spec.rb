@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Mes::Dynamo::Chain do
-  include_context 'with dynamodb table',
+  include_context(
+    'with dynamodb table',
     :movies,
     attribute_definitions: [{
       attribute_name: 'content_id',
@@ -28,9 +29,9 @@ RSpec.describe Mes::Dynamo::Chain do
         write_capacity_units: 1
       }
     }]
+  )
 
-  class Movie
-    include Mes::Dynamo::Model
+  class Movie < Mes::Dynamo::Model
     field :title
   end
 

@@ -4,28 +4,32 @@ module DynamoDBSpecHelpers
     check_schema(opts[:key_schema])
 
     client.create_table(
-      {
+      opts.merge(
         table_name: table_name,
-        provisioned_throughput: {
-          read_capacity_units: 1,
-          write_capacity_units: 1
-        }
-      }.merge(opts)
+        provisioned_throughput: { read_capacity_units: 1, write_capacity_units: 1 }
+      )
     )
     wait_till_table_create(table_name)
   end
 
   def drop_table(table_name)
-    client.delete_table(table_name: table_name)
+    client.delete_table(table_name: table_name) if table_exists?(table_name)
+  end
+
+  def describe_table(table_name)
+    client.describe_table(table_name: table_name).table.to_h
+  end
+
+  def table_exists?(table_name)
+    describe_table(table_name)[:table_status] == 'ACTIVE'
+  rescue Aws::DynamoDB::Errors::ResourceNotFoundException
+    false
   end
 
   def wait_till_table_create(table_name)
-    created = false
-    while !created
-      resp = client.describe_table(
-        table_name: table_name
-      )
-      created = true if resp.table.table_status == 'ACTIVE'
+    100.times do
+      break if table_exists?(table_name)
+      sleep 0.02
     end
   end
 
@@ -51,13 +55,8 @@ module DynamoDBSpecHelpers
   end
 
   def check_schema(array)
-    if !array.is_a?(Array)
-      raise ArgumentError, 'schema should be an array'
-    end
-
-    if array.any? { |el| !el.is_a?(Hash) }
-      raise ArgumentError, 'all elements should be hashes'
-    end
+    raise ArgumentError, 'schema should be an array' unless array.is_a?(Array)
+    raise ArgumentError, 'all elements should be hashes' if array.any? { |el| !el.is_a?(Hash) }
   end
 end
 
