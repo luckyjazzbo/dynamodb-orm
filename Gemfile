@@ -10,4 +10,5 @@ group :test do
   gem 'rspec',   '~> 3.4'
   gem 'webmock', '~> 2.0'
   gem 'fuubar'
+  gem 'dotenv', '~> 2'
 end

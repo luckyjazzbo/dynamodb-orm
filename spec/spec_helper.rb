@@ -1,8 +1,11 @@
-ENV['DYNAMODB_ENDPOINT'] = 'http://dynamodb:8000'
 RACK_ENV = 'test'.freeze unless defined?(RACK_ENV)
 
 require 'bundler/setup'
 Bundler.setup
+
+# Load environment configuration variables
+require 'dotenv'
+Dotenv.load(".env.#{RACK_ENV}")
 
 require 'mes/dynamo'
 require 'webmock/rspec'
