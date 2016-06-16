@@ -1,6 +1,6 @@
 module Mes
   class TransformationStep < ::Mes::Dynamo::Model
-    include Mes::Dynamo::Timestamps
+    include ::Mes::Dynamo::Timestamps
 
     table name: "lte-transformation-steps-#{RACK_ENV}", primary_key: :uuid
 
