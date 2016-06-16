@@ -28,9 +28,9 @@ module Mes
 
       def attribute_definitions
         defs = [{ attribute_name: model_class.primary_key, attribute_type: 'S' }]
-        model_class.fields.each do |field_name, field_opts|
-          if field_used_in_indices?(field_name)
-            defs << { attribute_name: field_name, attribute_type: field_opts[:type] }
+        model_class.fields.values.each do |field|
+          if field_used_in_indices?(field.name)
+            defs << { attribute_name: field.name.to_s, attribute_type: field.dynamodb_type }
           end
         end
         defs
@@ -60,7 +60,7 @@ module Mes
       end
 
       def field_used_in_indices?(field)
-        model_class.indices.any? { |index| index.all_fields.include?(field.to_sym) }
+        model_class.indices.any? { |index| index.all_fields.include?(field) }
       end
 
       def table_provisioned_throughput

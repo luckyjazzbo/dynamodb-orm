@@ -29,7 +29,7 @@ RSpec.describe Mes::Dynamo::TableCreator do
   context 'when some fields are defined without indices' do
     class ModelWithFieldsWithoutIndices < Mes::Dynamo::Model
       table primary_key: 'test_id'
-      field :title, type: 'S'
+      field :title, type: :string
     end
 
     before do
@@ -57,7 +57,7 @@ RSpec.describe Mes::Dynamo::TableCreator do
   context 'when some fields are defined without indices' do
     class ModelWithFieldsAndIndices < Mes::Dynamo::Model
       table primary_key: 'test_id'
-      field :title, type: 'S'
+      field :title, type: :string
       index :title
     end
 

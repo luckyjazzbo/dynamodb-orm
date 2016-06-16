@@ -10,8 +10,10 @@ require 'mes/dynamo/model/table_actions'
 require 'mes/dynamo/model/crud_actions'
 require 'mes/dynamo/model/callbacks'
 require 'mes/dynamo/model'
+require 'mes/dynamo/errors'
 require 'mes/dynamo/timestamps'
 require 'mes/dynamo/table_index'
+require 'mes/dynamo/table_field'
 require 'mes/dynamo/table_creator'
 
 require 'helpers/partition_helper'
@@ -21,7 +23,6 @@ require 'models/mes/transformation_step'
 require 'models/mes/transformed_resource'
 
 require 'mes/dynamo/version'
-require 'mes/dynamo/errors'
 
 module Mes
   module Dynamo

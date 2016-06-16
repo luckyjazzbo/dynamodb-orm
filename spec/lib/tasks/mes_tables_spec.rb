@@ -29,7 +29,7 @@ RSpec.describe 'mes_tables.rake' do
 
     before do
       ::Mes::Dynamo::MODELS.each do |model_class|
-        model_class.create unless table_exists?(model_class.table_name)
+        model_class.create_table! unless table_exists?(model_class.table_name)
       end
     end
 

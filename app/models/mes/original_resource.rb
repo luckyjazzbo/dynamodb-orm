@@ -4,8 +4,8 @@ module Mes
 
     table name: "lte-original-resources-#{RACK_ENV}", primary_key: :uuid
 
-    field :content_id, type: 'S'
-    field :partition, type: 'N'
+    field :content_id, type: :string
+    field :partition, type: :number
     field :data
 
     index :partition, range: :created_at, name: 'partition_created_at_index'

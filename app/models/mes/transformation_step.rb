@@ -4,9 +4,9 @@ module Mes
 
     table name: "lte-transformation-steps-#{RACK_ENV}", primary_key: :uuid
 
-    field :content_id, type: 'S'
+    field :content_id, type: :string
     field :data
-    field :original_resource_uuid, type: 'S'
+    field :original_resource_uuid, type: :string
     field :step
 
     before_create do

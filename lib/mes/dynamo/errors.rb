@@ -26,5 +26,6 @@ module Mes
     ValidationError     = Class.new(GenericError)
     TableDoesNotExist   = Class.new(GenericError)
     InvalidQuery        = Class.new(GenericError)
+    InvalidFieldType    = Class.new(GenericError)
   end
 end

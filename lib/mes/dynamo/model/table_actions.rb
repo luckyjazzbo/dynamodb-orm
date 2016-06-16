@@ -14,8 +14,8 @@ module Mes
         @primary_key = opts[:primary_key].to_s if opts[:primary_key].present?
       end
 
-      def field(name, opts = {})
-        fields[name.to_sym] = opts
+      def field(name, settings = {})
+        fields[name] = TableField.new(name, settings)
       end
 
       def fields
@@ -31,7 +31,7 @@ module Mes
       end
 
       def create_table!
-        ::Mes::Dynamo::TableCreator.new(self).create
+        TableCreator.new(self).create
       end
 
       def drop_table!
