@@ -30,11 +30,11 @@ module Mes
         @indices ||= []
       end
 
-      def create
+      def create_table!
         ::Mes::Dynamo::TableCreator.new(self).create
       end
 
-      def drop!
+      def drop_table!
         client.delete_table(table_name: table_name)
       rescue Aws::DynamoDB::Errors::ResourceNotFoundException
         false
