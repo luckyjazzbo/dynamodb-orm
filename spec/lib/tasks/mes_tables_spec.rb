@@ -9,8 +9,8 @@ RSpec.describe 'mes_tables.rake' do
     Dir[File.join(Mes::Dynamo::ROOT, 'lib/tasks/**/*.rake')].each { |f| load(f) }
   end
 
-  describe 'mes_tables:create_all' do
-    subject { rake['mes_tables:create_all'] }
+  describe 'mes:dynamo:create_tables' do
+    subject { rake['mes:dynamo:create_tables'] }
 
     before do
       ::Mes::Dynamo::MODELS.each { |model_class| drop_table(model_class.table_name) }
@@ -24,8 +24,8 @@ RSpec.describe 'mes_tables.rake' do
     end
   end
 
-  describe 'mes_tables:drop_all' do
-    subject { rake['mes_tables:drop_all'] }
+  describe 'mes:dynamo:drop_tables' do
+    subject { rake['mes:dynamo:drop_tables'] }
 
     before do
       ::Mes::Dynamo::MODELS.each do |model_class|
