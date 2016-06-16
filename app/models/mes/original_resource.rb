@@ -4,11 +4,11 @@ module Mes
 
     table name: "lte-original-resources-#{RACK_ENV}", primary_key: :uuid
 
-    field :content_id, type: :string
-    field :partition, type: :number
+    field :content_id,    type: :string
+    field :partition_key, type: :number
     field :data
 
-    index :partition, range: :created_at, name: 'partition_created_at_index'
+    index :partition_key, range: :created_at, name: 'partition_key_created_at_index'
 
     before_create do
       self.uuid ||= SecureRandom.uuid
