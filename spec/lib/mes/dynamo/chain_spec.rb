@@ -10,6 +10,9 @@ RSpec.describe Mes::Dynamo::Chain do
     }, {
       attribute_name: 'title',
       attribute_type: 'S'
+    }, {
+      attribute_name: 'created_at',
+      attribute_type: 'N'
     }],
     key_schema: [{
       attribute_name: 'content_id',
@@ -28,11 +31,28 @@ RSpec.describe Mes::Dynamo::Chain do
         read_capacity_units: 1,
         write_capacity_units: 1
       }
+    }, {
+      index_name: 'title_created_at_index',
+      key_schema: [{
+        attribute_name: 'title',
+        key_type: 'HASH'
+      }, {
+        attribute_name: 'created_at',
+        key_type: 'RANGE'
+      }],
+      projection: {
+        projection_type: 'ALL'
+      },
+      provisioned_throughput: {
+        read_capacity_units: 1,
+        write_capacity_units: 1
+      }
     }]
   )
 
   class Movie < Mes::Dynamo::Model
     field :title
+    field :created_at
   end
 
   let(:avatar_title) { 'Avatar' }
@@ -66,6 +86,29 @@ RSpec.describe Mes::Dynamo::Chain do
 
       it 'limits results' do
         expect { |block| subject.limit(1).each(&block) }.to yield_control.once
+      end
+    end
+
+    context '#order' do
+      subject do
+        described_class.new(Movie)
+          .index('title_created_at_index')
+          .where(title: avatar_title)
+      end
+
+      let!(:movie_1) { create_movie(:avatar, 'created_at' => Time.now.to_i) }
+      let!(:movie_2) { create_movie(:avatar, 'created_at' => Time.now.to_i + 1) }
+
+      it 'raises error in scan mode' do
+        expect { described_class.new(Movie, scan: true).last }.to raise_error Mes::Dynamo::InvalidQuery
+      end
+
+      it 'returns in reverse order' do
+        expect(subject.order('desc').first.content_id).to eq movie_2.content_id
+      end
+
+      it 'returns in ascending order' do
+        expect(subject.order('asc').first.content_id).to eq movie_1.content_id
       end
     end
 
@@ -205,17 +248,20 @@ RSpec.describe Mes::Dynamo::Chain do
 
   private
 
-  def create_movie(name)
+  def create_movie(name, attrs_overrides = {})
+    attrs = {
+      'content_id' => "m-#{rand(999_999)}",
+      'created_at' => Time.now.to_i
+    }.merge(attrs_overrides)
+
     case name
     when :avatar
       Movie.create!(
-        'content_id' => "m-#{rand(999_999)}",
-        'title' => avatar_title
+        { 'title' => avatar_title }.merge(attrs)
       )
     when :superman
       Movie.create!(
-        'content_id' => "m-#{rand(999_999)}",
-        'title' => superman_title
+        { 'title' => superman_title }.merge(attrs)
       )
     end
   end
