@@ -17,7 +17,7 @@ module Mes
       end
 
       def dynamodb_type
-        TYPES[type] if type.present?
+        TYPES[type]
       end
 
       private
