@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-RSpec.describe Mes::Dynamo::Callbacks do
-  include_context \
+RSpec.describe Mes::Dynamo::Model::Callbacks do
+  include_context(
     'with dynamodb table',
     :sample_table,
     attribute_definitions: [{
@@ -12,6 +12,7 @@ RSpec.describe Mes::Dynamo::Callbacks do
       attribute_name: 'content_id',
       key_type: 'HASH'
     }]
+  )
 
   context 'before_create' do
     class ModelWithBeforeCreateCallback < Mes::Dynamo::Model

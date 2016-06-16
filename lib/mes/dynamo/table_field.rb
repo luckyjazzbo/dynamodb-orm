@@ -10,9 +10,10 @@ module Mes
 
       def initialize(field_name, settings)
         @name = field_name.to_sym
-        @type = settings[:type].to_sym if settings.key?(:type)
-
-        validate_type!
+        if settings.key?(:type)
+          @type = settings[:type].to_sym
+          validate_type!
+        end
       end
 
       def dynamodb_type
