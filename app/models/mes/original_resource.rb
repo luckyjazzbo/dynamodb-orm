@@ -15,7 +15,7 @@ module Mes
     end
 
     before_save do
-      self.partition = ::Mes::PartitionHelper.from_unix_timestamp(created_at || Time.now.to_i)
+      self.partition_key = ::Mes::PartitionHelper.from_unix_timestamp(created_at || Time.now.to_i)
     end
   end
 end
