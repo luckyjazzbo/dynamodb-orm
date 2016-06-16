@@ -9,8 +9,7 @@ gem 'mes-dynamo', git: 'git@github.com:glomex/mes-dynamo.git'
 ## Usage
 
 ```ruby
-class Movie
-  include Mes::Dynamo::Model
+class Movie < Mes::Dynamo::Model
 
   # Optional:
   table name: :sample_table, primary_key: 'custom_id'

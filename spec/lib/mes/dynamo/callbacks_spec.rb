@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-RSpec.describe Mes::Dynamo::Callbacks do
-  include_context \
+RSpec.describe Mes::Dynamo::Model::Callbacks do
+  include_context(
     'with dynamodb table',
     :sample_table,
     attribute_definitions: [{
@@ -12,10 +12,10 @@ RSpec.describe Mes::Dynamo::Callbacks do
       attribute_name: 'content_id',
       key_type: 'HASH'
     }]
+  )
 
   context 'before_create' do
-    class ModelWithBeforeCreateCallback
-      include Mes::Dynamo::Model
+    class ModelWithBeforeCreateCallback < Mes::Dynamo::Model
       table name: :sample_table
       field :counter
 
@@ -34,8 +34,7 @@ RSpec.describe Mes::Dynamo::Callbacks do
   end
 
   context 'before_save' do
-    class ModelWithBeforeSaveCallback
-      include Mes::Dynamo::Model
+    class ModelWithBeforeSaveCallback < Mes::Dynamo::Model
       table name: :sample_table
       field :counter
 
@@ -54,8 +53,7 @@ RSpec.describe Mes::Dynamo::Callbacks do
   end
 
   context 'timestamps' do
-    class ModelWithTimestamps
-      include Mes::Dynamo::Model
+    class ModelWithTimestamps < Mes::Dynamo::Model
       include Mes::Dynamo::Timestamps
       table name: :sample_table
       field :title

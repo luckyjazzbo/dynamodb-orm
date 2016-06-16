@@ -2,8 +2,8 @@ module Mes
   module Dynamo
     module Timestamps
       def self.included(base)
-        base.field :created_at
-        base.field :updated_at
+        base.field :created_at, type: :number
+        base.field :updated_at, type: :number
 
         base.before_update do
           self.updated_at = current_time

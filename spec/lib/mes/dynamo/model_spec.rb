@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Mes::Dynamo::Model do
-  include_context \
+  include_context(
     'with dynamodb table',
     :movies,
     attribute_definitions: [{
@@ -12,9 +12,9 @@ RSpec.describe Mes::Dynamo::Model do
       attribute_name: 'content_id',
       key_type: 'HASH'
     }]
+  )
 
-  class Movie
-    include Mes::Dynamo::Model
+  class Movie < Mes::Dynamo::Model
     field :title
   end
 
@@ -23,8 +23,7 @@ RSpec.describe Mes::Dynamo::Model do
   let(:movie)      { Movie.new }
 
   describe '#primary_key' do
-    class TableWithCustomPrimaryKey
-      include Mes::Dynamo::Model
+    class TableWithCustomPrimaryKey < Mes::Dynamo::Model
       table primary_key: 'custom_id'
     end
 
@@ -80,17 +79,17 @@ RSpec.describe Mes::Dynamo::Model do
       end
 
       it 'saves new object' do
-        expect do
+        expect {
           movie.save!
-        end.to change { Movie.count }.by(1)
+        }.to change { Movie.count }.by(1)
       end
     end
 
     context 'when cannot be saved' do
       it 'raises exception' do
-        expect do
+        expect {
           movie.save!
-        end.to raise_error Mes::Dynamo::GenericError
+        }.to raise_error Mes::Dynamo::GenericError
       end
     end
   end
@@ -154,8 +153,7 @@ RSpec.describe Mes::Dynamo::Model do
     end
 
     context 'when is assigned' do
-      class FunnyMovie
-        include Mes::Dynamo::Model
+      class FunnyMovie < Mes::Dynamo::Model
         table name: 'custom_table_name'
       end
 
@@ -165,12 +163,12 @@ RSpec.describe Mes::Dynamo::Model do
 
   describe '.create!' do
     it 'creates record' do
-      expect do
+      expect {
         Movie.create!(
           content_id: 'v-create!',
           title: title
         )
-      end.to change { Movie.count }.by(1)
+      }.to change { Movie.count }.by(1)
     end
   end
 
@@ -191,23 +189,21 @@ RSpec.describe Mes::Dynamo::Model do
 
     context 'when document does not exist' do
       it 'throws exception' do
-        expect do
+        expect {
           Movie.find!('no-such-record')
-        end.to raise_error(Mes::Dynamo::RecordNotFound)
+        }.to raise_error(Mes::Dynamo::RecordNotFound)
       end
     end
   end
 
   describe '.count' do
     context 'when table does not exist' do
-      class ModelWithNoTable
-        include Mes::Dynamo::Model
-      end
+      class ModelWithNoTable < Mes::Dynamo::Model; end
 
       it 'raise exception' do
-        expect do
+        expect {
           ModelWithNoTable.count
-        end.to raise_error(Mes::Dynamo::TableDoesNotExist)
+        }.to raise_error(Mes::Dynamo::TableDoesNotExist)
       end
     end
   end
