@@ -58,6 +58,14 @@ module Mes
         end
       end
 
+      def order(direction)
+        raise InvalidQuery, 'Ordering is not supported in scan mode' if scan?
+        
+        dup.tap do |chain|
+          chain.direction = direction
+        end
+      end
+
       def first
         dup.tap do |chain|
           chain.limit_of_results = 1
