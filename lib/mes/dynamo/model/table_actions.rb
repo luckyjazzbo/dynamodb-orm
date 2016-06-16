@@ -23,12 +23,12 @@ module Mes
           @fields ||= {}.with_indifferent_access
         end
 
-        def index(hash_field, settings = {})
-          indices << TableIndex.new(hash_field, settings)
+        def table_index(hash_field, settings = {})
+          table_indices << TableIndex.new(hash_field, settings)
         end
 
-        def indices
-          @indices ||= []
+        def table_indices
+          @table_indices ||= []
         end
 
         def create_table!

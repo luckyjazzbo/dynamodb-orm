@@ -8,7 +8,7 @@ module Mes
     field :partition_key, type: :number
     field :data
 
-    index :partition_key, range: :created_at, name: 'partition_key_created_at_index'
+    table_index :partition_key, range: :created_at, name: 'partition_key_created_at_index'
 
     before_create do
       self.uuid ||= SecureRandom.uuid

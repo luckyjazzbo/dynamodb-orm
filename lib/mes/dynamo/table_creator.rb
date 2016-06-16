@@ -41,7 +41,7 @@ module Mes
       end
 
       def global_secondary_indexes
-        model_class.indices.map do |index|
+        model_class.table_indices.map do |index|
           {
             index_name: index.name,
             key_schema: key_schema_for(index),
@@ -60,7 +60,7 @@ module Mes
       end
 
       def field_used_in_indices?(field)
-        model_class.indices.any? { |index| index.all_fields.include?(field) }
+        model_class.table_indices.any? { |index| index.all_fields.include?(field) }
       end
 
       def table_provisioned_throughput

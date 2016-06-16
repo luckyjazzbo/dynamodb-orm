@@ -58,7 +58,7 @@ RSpec.describe Mes::Dynamo::TableCreator do
     class ModelWithFieldsAndIndices < Mes::Dynamo::Model
       table primary_key: 'test_id'
       field :title, type: :string
-      index :title
+      table_index :title
     end
 
     before do
