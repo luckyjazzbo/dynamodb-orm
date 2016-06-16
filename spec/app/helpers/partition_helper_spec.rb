@@ -8,7 +8,7 @@ RSpec.describe Mes::PartitionHelper do
       ).to eq 0
     end
 
-    it 'calculates different partitions for different weeks' do
+    it 'calculates different values for different weeks' do
       expect(
         described_class.from_unix_timestamp(Time.now.to_i)
       ).not_to eq(

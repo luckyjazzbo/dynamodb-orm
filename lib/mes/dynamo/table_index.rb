@@ -4,7 +4,7 @@ module Mes
       attr_reader :name, :hash, :range
 
       def initialize(hash_field, settings)
-        @hash = hash_field
+        @hash = hash_field.to_sym
         @range = cleanup_range(settings[:range])
         @name = settings[:name] || autogenerate_table_name
       end
