@@ -2,8 +2,16 @@ module Mes
   module Dynamo
     class TableField
       TYPES = {
-        string: 'S',
-        number: 'N'
+        string:     'S',
+        string_set: 'SS',
+        number:     'N',
+        number_set: 'NS',
+        binary:     'B',
+        binary_set: 'BS',
+        boolean:    'BOOL',
+        list:       'L',
+        map:        'M',
+        null:       'NULL'
       }.freeze
 
       attr_reader :name, :type
