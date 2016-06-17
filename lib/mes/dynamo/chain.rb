@@ -59,10 +59,13 @@ module Mes
       end
 
       def order(direction)
+        valid_directions = %(desc asc).freeze
+        normalized_direction = direction.to_s.downcase
         raise InvalidQuery, 'Ordering is not supported in scan mode' if scan?
+        raise InvalidOrder, 'Order must be one of "desc" or "asc"'   unless valid_directions.include?(normalized_direction)
 
         dup.tap do |chain|
-          chain.direction = direction.to_s.downcase
+          chain.direction = normalized_direction
         end
       end
 
