@@ -7,6 +7,11 @@ module Mes
         def init_attributes(attrs)
           @attributes = {}
           assign_attributes(attrs.stringify_keys)
+
+          cls.fields.each do |field_name, field|
+            next if @attributes.key?(field_name)
+            @attributes[field_name] = field.default if field.default?
+          end
         end
 
         def primary_key

@@ -18,9 +18,22 @@ module Mes
 
       def initialize(field_name, settings)
         @name = field_name.to_sym
+        @default = settings[:default]
         if settings.key?(:type)
           @type = settings[:type].to_sym
           validate_type!
+        end
+      end
+
+      def default?
+        !@default.nil?
+      end
+
+      def default
+        if @default.respond_to?(:call)
+          @default.call
+        else
+          @default
         end
       end
 
