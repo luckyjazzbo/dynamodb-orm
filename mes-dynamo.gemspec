@@ -16,7 +16,6 @@ Gem::Specification.new do |spec|
 
   spec.licenses = ['MIT']
 
-  spec.add_dependency 'rake'
   spec.add_dependency 'activesupport', '~> 4.2'
   spec.add_dependency 'aws-sdk', '~> 2'
   spec.add_dependency 'rake', '~> 10.0'
