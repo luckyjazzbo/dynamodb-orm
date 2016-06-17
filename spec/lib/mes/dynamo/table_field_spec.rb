@@ -39,6 +39,32 @@ RSpec.describe Mes::Dynamo::TableField do
     end
   end
 
+  describe '#default' do
+    context 'when not specified' do
+      subject { described_class.new(name, {}) }
+
+      it 'returns nil' do
+        expect(subject.default).to be_nil
+      end
+    end
+
+    context 'when value' do
+      subject { described_class.new(name, default: 'test_value') }
+
+      it 'returns default value' do
+        expect(subject.default).to eq('test_value')
+      end
+    end
+
+    context 'when lambda' do
+      subject { described_class.new(name, default: -> { 'test_value' }) }
+
+      it 'evaluates default value' do
+        expect(subject.default).to eq('test_value')
+      end
+    end
+  end
+
   describe '#dynamodb_type' do
     subject { described_class.new(name, type: :string) }
 
