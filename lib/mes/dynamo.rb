@@ -16,7 +16,7 @@ require 'mes/dynamo/table_index'
 require 'mes/dynamo/table_field'
 require 'mes/dynamo/table_creator'
 
-require 'helpers/partition_helper'
+require 'helpers/period_helper'
 
 require 'models/mes/original_resource'
 require 'models/mes/transformation_step'

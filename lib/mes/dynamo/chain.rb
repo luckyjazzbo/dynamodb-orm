@@ -60,9 +60,9 @@ module Mes
 
       def order(direction)
         raise InvalidQuery, 'Ordering is not supported in scan mode' if scan?
-        
+
         dup.tap do |chain|
-          chain.direction = direction
+          chain.direction = direction.to_s.downcase
         end
       end
 
