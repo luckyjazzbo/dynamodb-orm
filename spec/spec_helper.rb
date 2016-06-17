@@ -26,4 +26,8 @@ RSpec.configure do |config|
   end
 
   config.order = :random
+
+  config.before(:all) do
+    drop_all_tables
+  end
 end

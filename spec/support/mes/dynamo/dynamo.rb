@@ -16,6 +16,13 @@ module DynamoDBSpecHelpers
     client.delete_table(table_name: table_name) if table_exists?(table_name)
   end
 
+  def drop_all_tables
+    response = client.list_tables
+    response.table_names.each do |table_name|
+      drop_table(table_name)
+    end
+  end
+
   def describe_table(table_name)
     client.describe_table(table_name: table_name).table.to_h
   end
