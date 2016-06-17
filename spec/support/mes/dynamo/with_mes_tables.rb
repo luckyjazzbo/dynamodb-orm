@@ -1,3 +1,5 @@
+require_relative 'dynamo'
+
 RSpec.shared_context 'with mes tables' do
   before(:all) do
     ::Mes::Dynamo::MODELS.each do |model_class|

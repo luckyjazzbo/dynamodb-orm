@@ -1,9 +1,6 @@
 module DynamoDBSpecHelpers
   def create_table(table_name, opts)
-    check_schema(opts[:attribute_definitions])
-    check_schema(opts[:key_schema])
-
-    client.create_table(
+    dynamodb_client.create_table(
       opts.merge(
         table_name: table_name,
         provisioned_throughput: { read_capacity_units: 1, write_capacity_units: 1 }
@@ -13,18 +10,18 @@ module DynamoDBSpecHelpers
   end
 
   def drop_table(table_name)
-    client.delete_table(table_name: table_name) if table_exists?(table_name)
+    dynamodb_client.delete_table(table_name: table_name) if table_exists?(table_name)
   end
 
   def drop_all_tables
-    response = client.list_tables
+    response = dynamodb_client.list_tables
     response.table_names.each do |table_name|
       drop_table(table_name)
     end
   end
 
   def describe_table(table_name)
-    client.describe_table(table_name: table_name).table.to_h
+    dynamodb_client.describe_table(table_name: table_name).table.to_h
   end
 
   def table_exists?(table_name)
@@ -42,13 +39,13 @@ module DynamoDBSpecHelpers
 
   def truncate_table(table_name, opts)
     primary_key = opts[:key_schema][0][:attribute_name]
-    response = client.scan(
+    response = dynamodb_client.scan(
       table_name: table_name,
       attributes_to_get: [primary_key],
       select: 'SPECIFIC_ATTRIBUTES'
     )
     response.items.each do |item|
-      client.delete_item(
+      dynamodb_client.delete_item(
         table_name: table_name,
         key: { primary_key => item[primary_key] }
       )
@@ -57,13 +54,8 @@ module DynamoDBSpecHelpers
 
   private
 
-  def client
+  def dynamodb_client
     Mes::Dynamo::Connection.connect
-  end
-
-  def check_schema(array)
-    raise ArgumentError, 'schema should be an array' unless array.is_a?(Array)
-    raise ArgumentError, 'all elements should be hashes' if array.any? { |el| !el.is_a?(Hash) }
   end
 end
 
