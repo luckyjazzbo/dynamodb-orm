@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activesupport', '~> 4.2'
   spec.add_dependency 'aws-sdk', '~> 2'
-  spec.add_dependency 'rake', '~> 10.5'
+  spec.add_dependency 'rake', '~> 11.1'
 
   spec.add_development_dependency 'factory_girl', '~> 4.7'
   spec.add_development_dependency 'bundler', '~> 1.10'
