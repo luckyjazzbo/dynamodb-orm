@@ -252,6 +252,12 @@ RSpec.describe Mes::Dynamo::Chain do
           chain_with_title_created_at_index.order('asc').first.content_id
         ).to eq(movie_1.content_id)
       end
+
+      it 'validates orders' do
+        expect {
+          chain_with_title_created_at_index.order('invalid')
+        }.to raise_error ::Mes::Dynamo::InvalidOrder
+      end
     end
   end
 
