@@ -1,5 +1,4 @@
 require_relative 'mes/dynamo'
-
 require 'rake'
 
 module Mes
