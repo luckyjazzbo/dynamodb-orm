@@ -9,7 +9,9 @@ Dotenv.load(".env.#{RACK_ENV}")
 require 'rake'
 require 'mes/dynamo'
 require 'webmock/rspec'
+require 'factory_girl'
 
+FactoryGirl.find_definitions
 WebMock.disable_net_connect!(allow: ENV['DYNAMODB_ENDPOINT'])
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
