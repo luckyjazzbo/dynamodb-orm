@@ -25,6 +25,7 @@ module Mes
     RecordNotFound      = Class.new(GenericError)
     ValidationError     = Class.new(GenericError)
     TableDoesNotExist   = Class.new(GenericError)
+    InvalidOrder        = Class.new(GenericError)
     InvalidQuery        = Class.new(GenericError)
     InvalidFieldType    = Class.new(GenericError)
   end

@@ -41,6 +41,10 @@ module Mes
           end
         end
 
+        def respond_to?(method, include_private = false)
+          attribute?(method) || attribute_setter?(method) || super
+        end
+
         private
 
         def attribute_setter?(name)

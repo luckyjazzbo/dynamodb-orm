@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Mes::Dynamo::Chain do
   include_context(
     'with dynamodb table',
-    :movies,
+    'movies',
     attribute_definitions: [{
       attribute_name: 'content_id',
       attribute_type: 'S'
@@ -53,12 +53,15 @@ RSpec.describe Mes::Dynamo::Chain do
   class Movie < Mes::Dynamo::Model
     field :title
     field :created_at
+
+    table_index :title, name: 'title_index'
+    table_index :title, range: :created_at, name: 'title_created_at_index'
   end
 
   let(:avatar_title) { 'Avatar' }
   let(:superman_title) { 'Superman' }
 
-  context 'when scaning' do
+  context 'when scan mode' do
     subject { described_class.new(Movie, scan: true) }
 
     context '#each' do
@@ -90,25 +93,8 @@ RSpec.describe Mes::Dynamo::Chain do
     end
 
     context '#order' do
-      subject do
-        described_class.new(Movie)
-          .index('title_created_at_index')
-          .where(title: avatar_title)
-      end
-
-      let!(:movie_1) { create_movie(:avatar, 'created_at' => Time.now.to_i) }
-      let!(:movie_2) { create_movie(:avatar, 'created_at' => Time.now.to_i + 1) }
-
-      it 'raises error in scan mode' do
-        expect { described_class.new(Movie, scan: true).last }.to raise_error Mes::Dynamo::InvalidQuery
-      end
-
-      it 'returns in reverse order' do
-        expect(subject.order('desc').first.content_id).to eq movie_2.content_id
-      end
-
-      it 'returns in ascending order' do
-        expect(subject.order('asc').first.content_id).to eq movie_1.content_id
+      it 'raises error' do
+        expect { subject.order('desc') }.to raise_error Mes::Dynamo::InvalidQuery
       end
     end
 
@@ -129,10 +115,16 @@ RSpec.describe Mes::Dynamo::Chain do
     end
   end
 
-  context 'when querying' do
-    let(:chain_with_where) do
+  context 'when query mode' do
+    let(:chain_with_title_index) do
       subject
         .index('title_index')
+        .where(title: avatar_title)
+    end
+
+    let(:chain_with_title_created_at_index) do
+      subject
+        .index('title_created_at_index')
         .where(title: avatar_title)
     end
 
@@ -152,7 +144,7 @@ RSpec.describe Mes::Dynamo::Chain do
       end
 
       it 'limits results' do
-        expect { |block| chain_with_where.limit(1).each(&block) }.to yield_control.once
+        expect { |block| chain_with_title_index.limit(1).each(&block) }.to yield_control.once
       end
     end
 
@@ -160,7 +152,7 @@ RSpec.describe Mes::Dynamo::Chain do
       context 'when table is empty' do
         it 'yeilds nothing' do
           expect { |block|
-            chain_with_where.each(&block)
+            chain_with_title_index.each(&block)
           }.not_to yield_control
         end
       end
@@ -173,7 +165,7 @@ RSpec.describe Mes::Dynamo::Chain do
 
         it 'yeilds all items' do
           expect { |block|
-            chain_with_where.each(&block)
+            chain_with_title_index.each(&block)
           }.to yield_control.once
         end
 
@@ -192,7 +184,7 @@ RSpec.describe Mes::Dynamo::Chain do
     describe '#first' do
       context 'when table is empty' do
         it 'returns nil' do
-          expect(chain_with_where.first).to be nil
+          expect(chain_with_title_index.first).to be nil
         end
       end
 
@@ -211,7 +203,7 @@ RSpec.describe Mes::Dynamo::Chain do
 
         context 'with where condition' do
           it 'returns last item' do
-            expect(chain_with_where.first.title).to eq avatar_title
+            expect(chain_with_title_index.first.title).to eq avatar_title
           end
         end
       end
@@ -220,7 +212,7 @@ RSpec.describe Mes::Dynamo::Chain do
     describe '#last' do
       context 'when table is empty' do
         it 'returns nil' do
-          expect(chain_with_where.last).to be nil
+          expect(chain_with_title_index.last).to be nil
         end
       end
 
@@ -239,9 +231,32 @@ RSpec.describe Mes::Dynamo::Chain do
 
         context 'with where condition' do
           it 'returns last item' do
-            expect(chain_with_where.last.title).to eq avatar_title
+            expect(chain_with_title_index.last.title).to eq avatar_title
           end
         end
+      end
+    end
+
+    context '#order' do
+      let!(:movie_1) { create_movie(:avatar, 'created_at' => Time.now.to_i) }
+      let!(:movie_2) { create_movie(:avatar, 'created_at' => Time.now.to_i + 1) }
+
+      it 'returns in descending order' do
+        expect(
+          chain_with_title_created_at_index.order('desc').first.content_id
+        ).to eq(movie_2.content_id)
+      end
+
+      it 'returns in ascending order' do
+        expect(
+          chain_with_title_created_at_index.order('asc').first.content_id
+        ).to eq(movie_1.content_id)
+      end
+
+      it 'validates orders' do
+        expect {
+          chain_with_title_created_at_index.order('invalid')
+        }.to raise_error ::Mes::Dynamo::InvalidOrder
       end
     end
   end

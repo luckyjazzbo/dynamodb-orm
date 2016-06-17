@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Mes::PartitionHelper do
+RSpec.describe Mes::PeriodHelper do
   describe '.from_unix_timestamp' do
     it 'calculates partition for 0' do
       expect(
