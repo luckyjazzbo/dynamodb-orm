@@ -5,7 +5,13 @@ RSpec.describe Mes::PeriodHelper do
     it 'calculates partition for 0' do
       expect(
         described_class.from_unix_timestamp(0)
-      ).to eq 0
+      ).to eq(0)
+    end
+
+    it 'works with float' do
+      expect(
+        described_class.from_unix_timestamp(1466342644.227963)
+      ).to eq(2424)
     end
 
     it 'calculates different values for different weeks' do
