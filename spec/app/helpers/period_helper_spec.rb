@@ -16,9 +16,9 @@ RSpec.describe Mes::PeriodHelper do
 
     it 'calculates different values for different weeks' do
       expect(
-        described_class.from_unix_timestamp(Time.now.to_i)
+        described_class.from_unix_timestamp(Time.now)
       ).not_to eq(
-        described_class.from_unix_timestamp((Time.now - 1.week).to_i)
+        described_class.from_unix_timestamp(Time.now - 1.week)
       )
     end
   end
