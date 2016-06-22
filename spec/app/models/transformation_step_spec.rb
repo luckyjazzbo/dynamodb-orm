@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Mes::TransformedResource do
+RSpec.describe Mes::TransformationStep do
   describe '#asset_type' do
     context 'by default' do
       it 'expected to be nil' do

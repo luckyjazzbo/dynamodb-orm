@@ -6,7 +6,7 @@ module Mes
 
     field :content_id, type: :string
     field :period,     type: :number
-    field :data
+    field :data, default: -> { {} }
 
     table_index :period, range: :created_at, name: 'period_created_at_index'
 
@@ -16,6 +16,10 @@ module Mes
 
     before_save do
       self.period = ::Mes::PeriodHelper.from_unix_timestamp(created_at || Time.now)
+    end
+
+    def asset_type
+      data['asset_type']
     end
   end
 end
