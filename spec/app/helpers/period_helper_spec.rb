@@ -8,7 +8,13 @@ RSpec.describe Mes::PeriodHelper do
       ).to eq(0)
     end
 
-    it 'works with float' do
+    it 'returns integers' do
+      expect(
+        described_class.from_unix_timestamp(Time.now)
+      ).to be_an(Integer)
+    end
+
+    it 'works with floats' do
       expect(
         described_class.from_unix_timestamp(1466342644.227963)
       ).to eq(2424)
