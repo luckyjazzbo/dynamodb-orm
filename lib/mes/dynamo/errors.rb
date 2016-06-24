@@ -2,9 +2,12 @@ module Mes
   module Dynamo
     class GenericError < StandardError
       def self.mes_error_for(origin_error = nil)
-        error = mes_error_class_for(origin_error).new(origin_error.message)
-        error.set_backtrace(origin_error.backtrace)
-        error
+        error_class = mes_error_class_for(origin_error)
+        return origin_error unless error_class
+
+        error_class.new(origin_error.message).tap do |error|
+          error.set_backtrace(origin_error.backtrace)
+        end
       end
 
       def self.mes_error_class_for(origin_error)
