@@ -27,16 +27,23 @@ module Mes
     autoload :Chain,      'mes/dynamo/chain'
 
     ROOT = File.expand_path('../../../', __FILE__)
-    MODELS = Dir[File.join(ROOT, 'app/models/mes/*.rb')].map do |file|
-      require file
-      model_name = File.basename(file, '.rb').classify
-      "Mes::#{model_name}".constantize
-    end.freeze
 
     cattr_writer :logger
+
+    def self.models
+      @models ||= Dir[File.join(ROOT, 'app/models/mes/*.rb')].map do |file|
+        model_class = File.basename(file, '.rb').classify
+        "Mes::#{model_class}".constantize
+      end
+    end
 
     def self.logger
       @logger ||= Logger.new('/dev/null')
     end
+  end
+
+  Dir[File.join(Dynamo::ROOT, 'app/models/mes/*.rb')].map do |file|
+    model_class = File.basename(file, '.rb').classify
+    autoload model_class, file
   end
 end
