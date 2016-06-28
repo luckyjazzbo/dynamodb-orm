@@ -18,9 +18,6 @@ require 'mes/dynamo/table_creator'
 
 require 'helpers/period_helper'
 
-require 'models/mes/original_resource'
-require 'models/mes/transformation_step'
-require 'models/mes/transformed_resource'
 
 require 'mes/dynamo/version'
 
@@ -31,6 +28,7 @@ module Mes
 
     ROOT = File.expand_path('../../../', __FILE__)
     MODELS = Dir[File.join(ROOT, 'app/models/mes/*.rb')].map do |file|
+      require file
       model_name = File.basename(file, '.rb').classify
       "Mes::#{model_name}".constantize
     end.freeze
