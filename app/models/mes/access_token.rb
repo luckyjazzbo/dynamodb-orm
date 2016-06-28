@@ -5,6 +5,7 @@ module Mes
     table name: "mes-access-tokens-#{RACK_ENV}", primary_key: :access_token
 
     field :user_id, type: :string
+    field :active, type: :boolean
 
     before_create do
       # We need 32-chars string, so we should pass 24 as a param to urlsafe_base64
