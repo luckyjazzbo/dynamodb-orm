@@ -2,7 +2,6 @@ require 'spec_helper'
 
 RSpec.describe 'mes_tables.rake' do
   let(:rake) { Rake::Application.new }
-  let(:daemonizer) { double('daemonizer') }
 
   before do
     Rake.application = rake

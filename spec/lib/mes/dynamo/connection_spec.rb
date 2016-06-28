@@ -7,7 +7,9 @@ RSpec.describe Mes::Dynamo::Connection do
         let(:dynamodb_endpoint) { 'http://dynamodb:8000' }
 
         before do
-          ENV['DYNAMODB_ENDPOINT'] = dynamodb_endpoint
+          allow(ENV).to receive(:[])
+            .with('DYNAMODB_ENDPOINT')
+            .and_return(dynamodb_endpoint)
         end
 
         it 'returns options with endpoint' do
@@ -20,7 +22,9 @@ RSpec.describe Mes::Dynamo::Connection do
 
       context 'when blank' do
         before do
-          ENV['DYNAMODB_ENDPOINT'] = ''
+          allow(ENV).to receive(:[])
+            .with('DYNAMODB_ENDPOINT')
+            .and_return('')
         end
 
         it 'returns options without endpoint' do
