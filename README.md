@@ -1,3 +1,9 @@
+# MES Dynamo
+
+[![Build Status](https://travis-ci.com/glomex/mes-dynamo.svg?token=wTxfWxNSPNpHpdJc4pif&branch=master)](https://travis-ci.com/glomex/mes-dynamo)
+
+A simple abstraction over AWS DynamoDB service.
+
 ## Installation
 
 Add this line to your application's Gemfile:

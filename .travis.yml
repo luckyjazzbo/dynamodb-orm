@@ -1,12 +1,16 @@
-language: ruby
-
-rvm:
-  - 2.3.1
-
-sudo: false
+sudo: required
+services:
+  - docker
 
 env:
-  - PURE_RUBY=1
-  - KITCHEN_SINK=1
+  COMPOSE_VERSION: 1.7.1
 
-script: bundle exec rake
+install:
+  - sudo apt-get update
+  - sudo apt-get -o Dpkg::Options::="--force-confnew" -y install docker-engine
+  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+script:
+  - docker-compose run app bundle exec rspec
