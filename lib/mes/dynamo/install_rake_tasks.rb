@@ -6,7 +6,7 @@ module Mes
       include Rake::DSL if defined? Rake::DSL
 
       def install_tasks
-        Dir.glob(File.expand_path('../tasks/*.rake', __FILE__)).each { |r| import r }
+        Dir.glob(File.join(Mes::Dynamo::ROOT, 'lib/tasks/*.rake')).each { |r| import r }
       end
     end
   end
