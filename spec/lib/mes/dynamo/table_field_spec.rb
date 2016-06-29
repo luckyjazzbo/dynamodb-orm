@@ -85,7 +85,7 @@ RSpec.describe Mes::Dynamo::TableField do
     context 'when not boolean' do
       subject { described_class.new(name, type: :string) }
 
-      it 'returns true' do
+      it 'returns false' do
         is_expected.not_to be_boolean
       end
     end
