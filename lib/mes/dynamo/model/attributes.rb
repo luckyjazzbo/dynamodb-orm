@@ -41,13 +41,18 @@ module Mes
             read_attribute(name)
           elsif attribute_setter?(name)
             write_attribute normalize_name(name), args[0]
+          elsif boolean_reader?(name)
+            read_attribute normalize_name(name)
           else
             super
           end
         end
 
         def respond_to?(method, include_private = false)
-          attribute?(method) || attribute_setter?(method) || super
+          attribute?(method) ||
+            attribute_setter?(method) ||
+            boolean_reader?(method) ||
+            super
         end
 
         private
@@ -57,8 +62,21 @@ module Mes
           name[-1] == '=' && attribute?(name[0..-2])
         end
 
+        def boolean_reader?(name)
+          name = name.to_s
+          name[-1] == '?' && boolean_attribute?(name[0..-2])
+        end
+
+        def boolean_attribute?(name)
+          attribute?(name) && cls.fields[name].boolean?
+        end
+
         def normalize_name(name)
-          attribute_setter?(name) ? name.to_s[0..-2] : name.to_s
+          if attribute_setter?(name) || boolean_reader?(name)
+            name.to_s[0..-2]
+          else
+            name.to_s
+          end
         end
       end
     end

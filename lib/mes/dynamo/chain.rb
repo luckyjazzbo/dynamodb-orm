@@ -29,7 +29,7 @@ module Mes
         end
       end
 
-      def select(select_fields)
+      def project(select_fields)
         dup.tap do |chain|
           chain.select_fields = select_fields
         end
