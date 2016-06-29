@@ -41,6 +41,8 @@ module Mes
             read_attribute(name)
           elsif attribute_setter?(name)
             write_attribute normalize_name(name), args[0]
+          elsif boolean_attribute?(name)
+            read_attribute normalize_name(name)
           else
             super
           end
@@ -57,8 +59,17 @@ module Mes
           name[-1] == '=' && attribute?(name[0..-2])
         end
 
+        def boolean_attribute?(name)
+          name = name.to_s
+          name[-1] == '?' && attribute?(name[0..-2])
+        end
+
         def normalize_name(name)
-          attribute_setter?(name) ? name.to_s[0..-2] : name.to_s
+          if attribute_setter?(name) || boolean_attribute?(name)
+            name.to_s[0..-2]
+          else
+            name.to_s
+          end
         end
       end
     end
