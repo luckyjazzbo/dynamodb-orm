@@ -72,4 +72,22 @@ RSpec.describe Mes::Dynamo::TableField do
       expect(subject.dynamodb_type).to eq('S')
     end
   end
+
+  describe '#boolean?' do
+    context 'when boolean' do
+      subject { described_class.new(name, type: :boolean) }
+
+      it 'returns true' do
+        is_expected.to be_boolean
+      end
+    end
+
+    context 'when not boolean' do
+      subject { described_class.new(name, type: :string) }
+
+      it 'returns true' do
+        is_expected.not_to be_boolean
+      end
+    end
+  end
 end

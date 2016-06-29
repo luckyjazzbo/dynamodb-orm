@@ -69,6 +69,29 @@ RSpec.describe Mes::Dynamo::Model do
     end
   end
 
+  describe 'attribute readers' do
+    class ModelWithAttrReaders < Mes::Dynamo::Model
+      field :title, type: :string
+      field :active, type: :boolean
+    end
+
+    subject { ModelWithAttrReaders.new }
+
+    context 'when boolean' do
+      it 'responds to both with or without question mark' do
+        is_expected.to respond_to(:active)
+        is_expected.to respond_to(:active?)
+      end
+    end
+
+    context 'when not boolean' do
+      it 'responds only to the field without question mark' do
+        is_expected.to respond_to(:title)
+        is_expected.not_to respond_to(:title?)
+      end
+    end
+  end
+
   describe '#save!' do
     context 'when can be saved' do
       before do

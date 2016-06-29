@@ -41,6 +41,10 @@ module Mes
         TYPES[type]
       end
 
+      def boolean?
+        type == :boolean
+      end
+
       private
 
       def validate_type!
