@@ -1,16 +1,25 @@
+language: ruby
+rvm: 2.2
 sudo: required
+cache:
+  - downloads
+  - .bundle
+
 services:
   - docker
 
-env:
-  COMPOSE_VERSION: 1.7.1
-
 install:
-  - sudo apt-get update
-  - sudo apt-get -o Dpkg::Options::="--force-confnew" -y install docker-engine
-  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+  - mkdir -p downloads
+  - sudo apt-get update -qq
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install -qq docker-engine
+
+before_script:
+  - if [ ! -f downloads/docker-compose ]; then
+    export COMPOSE_URL="https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m`";
+    curl -sL $COMPOSE_URL > downloads/docker-compose;
+    chmod +x downloads/docker-compose;
+    fi
+  - sudo cp downloads/docker-compose /usr/local/bin
 
 script:
   - docker-compose run app bundle exec rspec
