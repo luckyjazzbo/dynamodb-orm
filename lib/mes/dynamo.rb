@@ -1,4 +1,5 @@
 require 'active_support/all'
+require 'active_model'
 require 'aws-sdk'
 
 RACK_ENV = ENV.fetch('RACK_ENV', 'development') unless defined?(RACK_ENV)
@@ -15,10 +16,7 @@ require 'mes/dynamo/timestamps'
 require 'mes/dynamo/table_index'
 require 'mes/dynamo/table_field'
 require 'mes/dynamo/table_creator'
-
 require 'helpers/period_helper'
-
-
 require 'mes/dynamo/version'
 
 module Mes

@@ -35,19 +35,19 @@ RSpec.describe Mes::AccessToken do
     end
   end
 
-  describe '.by_user_id' do
+  describe '.by_tenant_id' do
     include_context 'with mes tables'
 
     before do
-      described_class.create!(user_id: 'u1')
-      described_class.create!(user_id: 'u1')
-      described_class.create!(user_id: 'u1', active: false)
-      described_class.create!(user_id: 'u2')
+      described_class.create!(tenant_id: 'u1')
+      described_class.create!(tenant_id: 'u1')
+      described_class.create!(tenant_id: 'u1', active: false)
+      described_class.create!(tenant_id: 'u2')
     end
 
-    it 'filters tokens by user_id' do
+    it 'filters tokens by tenant_id' do
       expect(
-        described_class.by_user_id('u1').to_a.size
+        described_class.by_tenant_id('u1').to_a.size
       ).to eq(2)
     end
   end
