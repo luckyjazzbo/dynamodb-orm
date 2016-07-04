@@ -2,10 +2,19 @@ module Mes
   class AccessToken < ::Mes::Dynamo::Model
     include ::Mes::Dynamo::Timestamps
 
+    TYPES = %w(EMBED WEB APP S2S INTERNAL TENANT).freeze
+    DEVISE_CLASSES = %w(BROWSER MOBILE SETTOPBOX SMARTTV HBBTV GAMECONSOLE HDMISTICK).freeze
+
     table name: "mes-access-tokens-#{RACK_ENV}", primary_key: :access_token
 
-    field :user_id, type: :string
-    field :active, type: :boolean, default: true
+    field :user_id,       type: :string
+    field :active,        type: :boolean, default: true
+    field :type,          type: :string,  default: 'EMBED'
+    field :device_class,  type: :string,  default: 'BROWSER'
+    field :title,         type: :string
+    field :app_shop_link, type: :string
+    field :s2s_ip_whitelist_range, type: :string_set
+    field :s2s_check_remote_ip,    type: :boolean
 
     table_index :user_id, name: 'user_id_index'
 
