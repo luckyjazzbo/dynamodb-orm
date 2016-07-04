@@ -4,6 +4,7 @@ module Mes
       extend LookupMethods
       extend TableActions
       extend Callbacks
+      include ActiveModel::Validations
       include Execution
       include Attributes
       include CRUDActions

@@ -31,5 +31,6 @@ module Mes
     InvalidOrder        = Class.new(GenericError)
     InvalidQuery        = Class.new(GenericError)
     InvalidFieldType    = Class.new(GenericError)
+    InvalidRecord       = Class.new(GenericError)
   end
 end
