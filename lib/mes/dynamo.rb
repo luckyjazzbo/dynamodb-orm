@@ -17,6 +17,7 @@ require 'mes/dynamo/table_index'
 require 'mes/dynamo/table_field'
 require 'mes/dynamo/table_creator'
 require 'helpers/period_helper'
+require 'helpers/initialization_vector_helper'
 require 'mes/dynamo/version'
 
 module Mes

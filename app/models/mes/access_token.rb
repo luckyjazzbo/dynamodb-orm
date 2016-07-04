@@ -28,7 +28,7 @@ module Mes
       # We need 32-chars string, so we should pass 24 as a param to urlsafe_base64
       # because it generates string with length: n*4/3
       self.access_token ||= SecureRandom.urlsafe_base64(24)
-      self.initialization_vector ||= SecureRandom.urlsafe_base64(16)
+      self.initialization_vector ||= InitializationVectorHelper.generate
     end
 
     validates :access_token,          presence: true
