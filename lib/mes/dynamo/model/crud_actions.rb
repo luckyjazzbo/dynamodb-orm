@@ -21,6 +21,7 @@ module Mes
         def save!
           cls.run_callbacks(self, :before_create) unless persisted?
           cls.run_callbacks(self, :before_save)
+          raise InvalidRecord, errors.full_messages.join("\n") if invalid?
           cls.client_execute(:put_item, item: attributes)
           persist!
         end
