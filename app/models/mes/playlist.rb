@@ -11,5 +11,10 @@ module Mes
     before_create do
       self.uuid ||= SecureRandom.uuid
     end
+
+    def self.by_tenant_id(tenant_id)
+      index('tenant_id_index')
+        .where(tenant_id: tenant_id)
+    end
   end
 end
