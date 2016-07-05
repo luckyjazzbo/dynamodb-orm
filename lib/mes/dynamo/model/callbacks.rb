@@ -14,6 +14,10 @@ module Mes
           store_callback(:before_save, block)
         end
 
+        def after_initialize(&block)
+          store_callback(:after_initialize, block)
+        end
+
         def store_callback(stage, block)
           callbacks_for(stage) << block
         end
