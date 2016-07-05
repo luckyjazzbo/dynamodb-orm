@@ -2,7 +2,10 @@ module Mes
   class TransformationStep < ::Mes::Dynamo::Model
     include ::Mes::Dynamo::Timestamps
 
-    table name: "lte-transformation-steps-#{RACK_ENV}", primary_key: :uuid
+    STEPS = %w(initial complete).freeze
+
+    table name: "lte-transformation-steps-#{RACK_ENV}",
+          primary_key: :uuid
 
     field :content_id, type: :string
     field :original_resource_uuid, type: :string
@@ -12,6 +15,12 @@ module Mes
     before_create do
       self.uuid ||= SecureRandom.uuid
     end
+
+    validates :uuid,                   presence: true
+    validates :content_id,             presence: true
+    validates :original_resource_uuid, presence: true
+
+    validates :step, inclusion: { in: STEPS }
 
     def asset_type
       data['asset_type']

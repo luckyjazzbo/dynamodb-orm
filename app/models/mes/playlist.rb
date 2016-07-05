@@ -2,7 +2,9 @@ module Mes
   class Playlist < ::Mes::Dynamo::Model
     include ::Mes::Dynamo::Timestamps
 
-    table name: "mes-playlists-#{RACK_ENV}", primary_key: :uuid
+    table name: "mes-playlists-#{RACK_ENV}",
+          primary_key: :uuid
+
     field :tenant_id, type: :string
     field :query, type: :map
 
@@ -11,6 +13,8 @@ module Mes
     before_create do
       self.uuid ||= SecureRandom.uuid
     end
+
+    validates :tenant_id, presence: true
 
     def self.by_tenant_id(tenant_id)
       index('tenant_id_index')

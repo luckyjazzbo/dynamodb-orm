@@ -28,4 +28,18 @@ RSpec.describe Mes::PeriodHelper do
       )
     end
   end
+
+  describe '.current' do
+    before do
+      allow(Time).to receive(:now).and_return(Time.now)
+    end
+
+    it 'returns current period' do
+      expect(
+        described_class.current
+      ).to eq(
+        described_class.from_unix_timestamp(Time.now)
+      )
+    end
+  end
 end

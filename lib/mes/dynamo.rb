@@ -2,6 +2,7 @@ require 'active_support/all'
 require 'active_support/securerandom_base58'
 require 'active_model'
 require 'aws-sdk'
+require 'faraday'
 
 RACK_ENV = ENV.fetch('RACK_ENV', 'development') unless defined?(RACK_ENV)
 
@@ -18,6 +19,7 @@ require 'mes/dynamo/table_index'
 require 'mes/dynamo/table_field'
 require 'mes/dynamo/table_creator'
 require 'helpers/period_helper'
+require 'helpers/content_id_service_client'
 require 'mes/dynamo/version'
 
 module Mes

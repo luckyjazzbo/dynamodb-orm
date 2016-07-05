@@ -2,11 +2,14 @@ module Mes
   class AccessToken < ::Mes::Dynamo::Model
     include ::Mes::Dynamo::Timestamps
 
-    TYPES = %w(EMBED WEB APP S2S INTERNAL TENANT).freeze
+    TYPES          = %w(EMBED WEB APP S2S INTERNAL TENANT).freeze
     DEVISE_CLASSES = %w(BROWSER MOBILE SETTOPBOX SMARTTV HBBTV GAMECONSOLE HDMISTICK).freeze
+    STATUSES       = %w(valid blocked).freeze
 
-    table name: "mes-access-tokens-#{RACK_ENV}", primary_key: :access_token
+    table name: "mes-access-tokens-#{RACK_ENV}",
+          primary_key: :id_token
 
+    field :access_token,  type: :string
     field :tenant_id,     type: :string
     field :active,        type: :boolean, default: true
     field :type,          type: :string,  default: 'EMBED'
@@ -31,18 +34,25 @@ module Mes
       self.initialization_vector ||= SecureRandom.base58(16)
     end
 
+    validates :id_token,              presence: true
     validates :access_token,          presence: true
     validates :tenant_id,             presence: true
     validates :initialization_vector, presence: true
 
     validates :type,         inclusion: { in: TYPES }
     validates :device_class, inclusion: { in: DEVISE_CLASSES }
-    validates :status,       inclusion: { in: %w(valid blocked) }
+    validates :status,       inclusion: { in: STATUSES }
 
     def self.by_tenant_id(tenant_id)
       index('tenant_id_index')
         .where(tenant_id: tenant_id)
         .select(&:active?)
+    end
+
+    def assign_id_token!
+      self.id_token = Mes::ContentIdServiceClient.new(
+        ENV.fetch('CONTENT_ID_SERVICE_URL')
+      ).next_access_token_id
     end
   end
 end
