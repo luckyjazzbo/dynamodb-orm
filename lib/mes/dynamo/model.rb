@@ -13,6 +13,7 @@ module Mes
       def initialize(attrs = {}, opts = {})
         init_attributes(attrs)
         persist! if opts[:persisted]
+        cls.run_callbacks(self, :after_initialize)
       end
     end
   end
