@@ -1,6 +1,33 @@
 require 'spec_helper'
 
 RSpec.describe Mes::AccessToken do
+  describe '.create_with_id_token' do
+    include_context 'with mes tables'
+
+    before do
+      allow_any_instance_of(Mes::ContentIdServiceClient).to \
+        receive_messages(next_access_token_id: SecureRandom.base58(16))
+    end
+
+    it 'assigns id_token' do
+      token = described_class.create_with_id_token!(tenant_id: 't-A1')
+
+      expect(token.id_token).to \
+        eq(Mes::ContentIdServiceClient.new('URL').next_access_token_id)
+    end
+  end
+
+  context 'callbacks' do
+    describe '#before_create' do
+      %w(access_token initialization_vector).each do |method|
+        it "assigns ##{method}" do
+          subject.save
+          expect(subject.send(method)).to_not be_empty
+        end
+      end
+    end
+  end
+
   context 'attributes' do
     describe 'default values' do
       {
