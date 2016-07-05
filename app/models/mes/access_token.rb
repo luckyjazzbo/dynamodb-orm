@@ -25,12 +25,12 @@ module Mes
     field :status,                type: :string, default: 'valid'
 
     table_index :tenant_id, name: 'tenant_id_index'
-    table_index :status, name: 'status_index'
+    table_index :status,    name: 'status_index'
 
     before_create do
       # We need 32-chars string, so we should pass 24 as a param to urlsafe_base64
       # because it generates string with length: n*4/3
-      self.access_token ||= SecureRandom.urlsafe_base64(24)
+      self.access_token          ||= SecureRandom.urlsafe_base64(24)
       self.initialization_vector ||= SecureRandom.base58(16)
     end
 
@@ -43,10 +43,19 @@ module Mes
     validates :device_class, inclusion: { in: DEVISE_CLASSES }
     validates :status,       inclusion: { in: STATUSES }
 
-    def self.by_tenant_id(tenant_id)
-      index('tenant_id_index')
-        .where(tenant_id: tenant_id)
-        .select(&:active?)
+    class << self
+      def create_with_id_token!(attrs = {})
+        new(attrs).tap do |token|
+          token.assign_id_token!
+          token.save!
+        end
+      end
+
+      def by_tenant_id(tenant_id)
+        index('tenant_id_index')
+          .where(tenant_id: tenant_id)
+          .select(&:active?)
+      end
     end
 
     def assign_id_token!
