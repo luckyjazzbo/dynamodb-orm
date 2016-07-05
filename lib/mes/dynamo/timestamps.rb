@@ -18,7 +18,8 @@ module Mes
       private
 
       def current_time
-        Time.now.to_f
+        # DynamoDB gem stores numbers as BigDecimal
+        ::BigDecimal.new Time.now.to_f, 16
       end
     end
   end
