@@ -21,6 +21,14 @@ module Mes
         # DynamoDB gem stores numbers as BigDecimal
         ::BigDecimal.new Time.now.to_f, 16
       end
+
+      def created_at
+        ::BigDecimal.new(@attributes['created_at']) if @attributes['created_at'].present?
+      end
+
+      def updated_at
+        ::BigDecimal.new(@attributes['updated_at']) if @attributes['updated_at'].present?
+      end
     end
   end
 end
