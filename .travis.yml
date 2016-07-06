@@ -2,18 +2,20 @@ language: ruby
 rvm: 2.2
 sudo: required
 cache:
-  - downloads
-  - .bundle
+  directories:
+    - .bundle
+    - downloads
 
 services:
   - docker
 
+
 install:
-  - mkdir -p downloads
   - sudo apt-get update -qq
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install -qq docker-engine
 
 before_script:
+  - mkdir -p downloads
   - if [ ! -f downloads/docker-compose ]; then
     export COMPOSE_URL="https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m`";
     curl -sL $COMPOSE_URL > downloads/docker-compose;
