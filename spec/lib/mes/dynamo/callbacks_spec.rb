@@ -70,10 +70,10 @@ RSpec.describe Mes::Dynamo::Model::Callbacks do
     it 'updates updated_at on updates' do
       model.save
 
-      allow(Time).to receive_messages(now: Time.now + 1)
-
-      model.update_attributes(title: 'hello')
-      expect(model.created_at).not_to eq model.updated_at
+      Timecop.freeze(Time.now + 1) do
+        model.update_attributes(title: 'hello')
+        expect(model.created_at).not_to eq model.updated_at
+      end
     end
   end
 end

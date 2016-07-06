@@ -10,6 +10,7 @@ require 'rake'
 require 'mes/dynamo'
 require 'webmock/rspec'
 require 'factory_girl'
+require 'timecop'
 
 FactoryGirl.find_definitions
 WebMock.disable_net_connect!(allow: ENV['DYNAMODB_ENDPOINT'])
