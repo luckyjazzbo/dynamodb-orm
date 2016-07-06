@@ -42,6 +42,10 @@ module Mes
     validates :device_class, inclusion: { in: DEVISE_CLASSES }
     validates :status,       inclusion: { in: STATUSES }
 
+    def asset_type
+      'asset_token'
+    end
+
     class << self
       def by_tenant_id(tenant_id)
         index('tenant_id_index')

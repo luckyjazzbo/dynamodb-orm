@@ -19,6 +19,10 @@ module Mes
     validates :query,      presence: true
     validates :type,       presence: true, inclusion: { in: TYPES }
 
+    def asset_type
+      'playlist'
+    end
+
     def self.by_tenant_id(tenant_id)
       index('tenant_id_index')
         .where(tenant_id: tenant_id)

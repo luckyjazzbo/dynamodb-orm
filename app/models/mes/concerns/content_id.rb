@@ -8,8 +8,9 @@ module Mes
 
     def assign_id!
       self.id = Mes::ContentIdServiceClient.new(
-        ENV.fetch('CONTENT_ID_SERVICE_URL')
-      ).next_access_token_id
+        ENV.fetch('CONTENT_ID_SERVICE_URL'),
+        asset_type
+      ).next_id
     end
 
     class_methods do

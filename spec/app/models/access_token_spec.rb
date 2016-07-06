@@ -6,14 +6,14 @@ RSpec.describe Mes::AccessToken do
 
     before do
       allow_any_instance_of(Mes::ContentIdServiceClient)
-        .to receive_messages(next_access_token_id: SecureRandom.base58(16))
+        .to receive_messages(next_id: SecureRandom.base58(16))
     end
 
     it 'assigns id' do
       token = described_class.create_with_id!(tenant_id: 't-A1')
 
       expect(token.id)
-        .to eq(Mes::ContentIdServiceClient.new('URL').next_access_token_id)
+        .to eq(Mes::ContentIdServiceClient.new('http://url', 'type').next_id)
     end
   end
 
@@ -84,9 +84,11 @@ RSpec.describe Mes::AccessToken do
     let(:id_service_client) { double('Mes::ContentIdServiceClient') }
 
     before do
-      allow(Mes::ContentIdServiceClient).to receive(:new)
+      allow(Mes::ContentIdServiceClient)
+        .to receive(:new)
         .and_return(id_service_client)
-      allow(id_service_client).to receive(:next_access_token_id)
+      allow(id_service_client)
+        .to receive(:next_id)
         .and_return(access_token)
     end
 
