@@ -5,11 +5,11 @@ RSpec.describe Mes::Dynamo::Model do
     'with dynamodb table',
     :movies,
     attribute_definitions: [{
-      attribute_name: 'content_id',
+      attribute_name: 'id',
       attribute_type: 'S'
     }],
     key_schema: [{
-      attribute_name: 'content_id',
+      attribute_name: 'id',
       key_type: 'HASH'
     }]
   )
@@ -18,7 +18,7 @@ RSpec.describe Mes::Dynamo::Model do
     field :title
   end
 
-  let(:content_id) { 'v-global' }
+  let(:id) { 'v-global' }
   let(:title)      { 'The Secret Life of Walter Mitty' }
   let(:movie)      { Movie.new }
 
@@ -96,7 +96,7 @@ RSpec.describe Mes::Dynamo::Model do
     context 'when can be saved' do
       before do
         movie.attributes.merge!(
-          'content_id' => content_id,
+          'id' => id,
           'title' => title
         )
       end
@@ -121,7 +121,7 @@ RSpec.describe Mes::Dynamo::Model do
     context 'when can be saved' do
       before do
         movie.attributes.merge!(
-          'content_id' => content_id,
+          'id' => id,
           'title' => title
         )
       end
@@ -139,7 +139,7 @@ RSpec.describe Mes::Dynamo::Model do
   end
 
   describe '#assign_attributes' do
-    let(:attributes) { { 'content_id' => content_id, 'title' => title } }
+    let(:attributes) { { 'id' => id, 'title' => title } }
 
     it 'saves new object' do
       movie.assign_attributes(attributes)
@@ -148,18 +148,18 @@ RSpec.describe Mes::Dynamo::Model do
   end
 
   describe '#update_attributes' do
-    let(:attributes) { { 'content_id' => content_id, 'title' => title } }
+    let(:attributes) { { 'id' => id, 'title' => title } }
 
     it 'saves new object' do
       movie.update_attributes(attributes)
-      expect(Movie.find(content_id).attributes).to eq(attributes)
+      expect(Movie.find(id).attributes).to eq(attributes)
     end
   end
 
   describe '#delete' do
     let(:movie) do
       Movie.create!(
-        content_id: 'v-delete',
+        id: 'v-delete',
         title: title
       )
     end
@@ -188,7 +188,7 @@ RSpec.describe Mes::Dynamo::Model do
     it 'creates record' do
       expect {
         Movie.create!(
-          content_id: 'v-create!',
+          id: 'v-create!',
           title: title
         )
       }.to change { Movie.count }.by(1)
@@ -199,13 +199,13 @@ RSpec.describe Mes::Dynamo::Model do
     context 'when document exists' do
       before do
         Movie.create!(
-          content_id: content_id,
+          id: id,
           title: title
         )
       end
 
       it 'feches document by id' do
-        result = Movie.find!(content_id)
+        result = Movie.find!(id)
         expect(result.title).to eq(title)
       end
     end
@@ -234,7 +234,7 @@ RSpec.describe Mes::Dynamo::Model do
   describe '.truncate!' do
     before do
       Movie.create!(
-        content_id: content_id,
+        id: id,
         title: title
       )
     end

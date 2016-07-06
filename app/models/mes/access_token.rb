@@ -1,13 +1,13 @@
 module Mes
   class AccessToken < ::Mes::Dynamo::Model
+    include ::Mes::ContentId
     include ::Mes::Dynamo::Timestamps
 
     TYPES          = %w(EMBED WEB APP S2S INTERNAL TENANT).freeze
     DEVISE_CLASSES = %w(BROWSER MOBILE SETTOPBOX SMARTTV HBBTV GAMECONSOLE HDMISTICK).freeze
     STATUSES       = %w(valid blocked).freeze
 
-    table name: "mes-access-tokens-#{RACK_ENV}",
-          primary_key: :id_token
+    table name: "mes-access-tokens-#{RACK_ENV}"
 
     field :access_token,  type: :string
     field :tenant_id,     type: :string
@@ -34,7 +34,6 @@ module Mes
       self.initialization_vector ||= SecureRandom.base58(16)
     end
 
-    validates :id_token,              presence: true
     validates :access_token,          presence: true
     validates :tenant_id,             presence: true
     validates :initialization_vector, presence: true
@@ -44,24 +43,11 @@ module Mes
     validates :status,       inclusion: { in: STATUSES }
 
     class << self
-      def create_with_id_token!(attrs = {})
-        new(attrs).tap do |token|
-          token.assign_id_token!
-          token.save!
-        end
-      end
-
       def by_tenant_id(tenant_id)
         index('tenant_id_index')
           .where(tenant_id: tenant_id)
-          .select(&:active?)
+          .select(&:active?) # TODO: refactor method to return a chain, not an array
       end
-    end
-
-    def assign_id_token!
-      self.id_token = Mes::ContentIdServiceClient.new(
-        ENV.fetch('CONTENT_ID_SERVICE_URL')
-      ).next_access_token_id
     end
   end
 end

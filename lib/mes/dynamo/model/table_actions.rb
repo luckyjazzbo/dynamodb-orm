@@ -7,7 +7,7 @@ module Mes
         end
 
         def primary_key
-          @primary_key || 'content_id'
+          @primary_key || 'id'
         end
 
         def table(opts = {})

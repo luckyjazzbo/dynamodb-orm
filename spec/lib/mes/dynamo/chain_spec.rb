@@ -5,7 +5,7 @@ RSpec.describe Mes::Dynamo::Chain do
     'with dynamodb table',
     'movies',
     attribute_definitions: [{
-      attribute_name: 'content_id',
+      attribute_name: 'id',
       attribute_type: 'S'
     }, {
       attribute_name: 'title',
@@ -15,7 +15,7 @@ RSpec.describe Mes::Dynamo::Chain do
       attribute_type: 'N'
     }],
     key_schema: [{
-      attribute_name: 'content_id',
+      attribute_name: 'id',
       key_type: 'HASH'
     }],
     global_secondary_indexes: [{
@@ -243,14 +243,14 @@ RSpec.describe Mes::Dynamo::Chain do
 
       it 'returns in descending order' do
         expect(
-          chain_with_title_created_at_index.order('desc').first.content_id
-        ).to eq(movie_2.content_id)
+          chain_with_title_created_at_index.order('desc').first.id
+        ).to eq(movie_2.id)
       end
 
       it 'returns in ascending order' do
         expect(
-          chain_with_title_created_at_index.order('asc').first.content_id
-        ).to eq(movie_1.content_id)
+          chain_with_title_created_at_index.order('asc').first.id
+        ).to eq(movie_1.id)
       end
 
       it 'validates orders' do
@@ -265,7 +265,7 @@ RSpec.describe Mes::Dynamo::Chain do
 
   def create_movie(name, attrs_overrides = {})
     attrs = {
-      'content_id' => "m-#{rand(999_999)}",
+      'id' => "m-#{rand(999_999)}",
       'created_at' => Time.now.to_i
     }.merge(attrs_overrides)
 
