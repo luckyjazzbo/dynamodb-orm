@@ -5,11 +5,11 @@ RSpec.describe Mes::Dynamo::Model::Callbacks do
     'with dynamodb table',
     :sample_table,
     attribute_definitions: [{
-      attribute_name: 'content_id',
+      attribute_name: 'id',
       attribute_type: 'S'
     }],
     key_schema: [{
-      attribute_name: 'content_id',
+      attribute_name: 'id',
       key_type: 'HASH'
     }]
   )
@@ -24,7 +24,7 @@ RSpec.describe Mes::Dynamo::Model::Callbacks do
       end
     end
 
-    let(:model) { ModelWithBeforeCreateCallback.new(content_id: 'before_create') }
+    let(:model) { ModelWithBeforeCreateCallback.new(id: 'before_create') }
 
     it 'calls before_create only on initial save' do
       model.save
@@ -43,7 +43,7 @@ RSpec.describe Mes::Dynamo::Model::Callbacks do
       end
     end
 
-    let(:model) { ModelWithBeforeSaveCallback.new(content_id: 'before_save') }
+    let(:model) { ModelWithBeforeSaveCallback.new(id: 'before_save') }
 
     it 'calls before_save callback on each save' do
       model.save
@@ -59,7 +59,7 @@ RSpec.describe Mes::Dynamo::Model::Callbacks do
       field :title
     end
 
-    let(:model) { ModelWithTimestamps.new(content_id: 'timestamps') }
+    let(:model) { ModelWithTimestamps.new(id: 'timestamps') }
 
     it 'inits timestamps on creation' do
       model.save

@@ -1,4 +1,7 @@
-require 'active_support/all'
+require 'active_support/core_ext/object'
+require 'active_support/core_ext/module'
+require 'active_support/core_ext/hash'
+require 'active_support/concern'
 require 'active_support/securerandom_base58'
 require 'active_model'
 require 'aws-sdk'
@@ -18,9 +21,11 @@ require 'mes/dynamo/timestamps'
 require 'mes/dynamo/table_index'
 require 'mes/dynamo/table_field'
 require 'mes/dynamo/table_creator'
+require 'mes/dynamo/version'
+
 require 'helpers/period_helper'
 require 'helpers/content_id_service_client'
-require 'mes/dynamo/version'
+require 'models/mes/concerns/content_id'
 
 module Mes
   module Dynamo
