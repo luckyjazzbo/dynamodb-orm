@@ -2,13 +2,14 @@ version: '2'
 services:
   app:
     build: .
-    command: rspec
     volumes:
       - .:/app
-      - ~/.aws:/root/.aws
-    links:
+      - $HOME/.aws:/root/.aws:ro
+    command: bundle exec rspec
+    ports:
+      - '3000:3000'
+    depends_on:
       - dynamodb
-
   dynamodb:
     image: ryanratcliff/dynamodb:latest
     ports:
