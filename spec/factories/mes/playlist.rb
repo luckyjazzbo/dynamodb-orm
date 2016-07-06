@@ -3,7 +3,8 @@ FactoryGirl.define do
 
   factory :playlist, class: 'Mes::Playlist' do
     id            { 'p-' + SecureRandom.urlsafe_base64(16) }
-    tenant_id     { SecureRandom.uuid }
+    tenant_id     { 't-' + SecureRandom.urlsafe_base64(16) }
+    creator_id    { 't-' + SecureRandom.urlsafe_base64(16) }
     title         { generate :playlist_title }
     type          { Mes::Playlist::TYPES.sample }
     query         { { query: { matchAll: {} } } }
