@@ -43,7 +43,7 @@ module Mes
     validates :status,       inclusion: { in: STATUSES }
 
     def asset_type
-      'asset_token'
+      'access_token'
     end
 
     class << self
