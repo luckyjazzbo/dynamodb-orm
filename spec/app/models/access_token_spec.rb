@@ -31,7 +31,6 @@ RSpec.describe Mes::AccessToken do
   context 'attributes' do
     describe 'default values' do
       {
-        active: true,
         type: 'EMBED',
         device_class: 'BROWSER'
       }.each do |attr, value|
@@ -68,7 +67,7 @@ RSpec.describe Mes::AccessToken do
     before do
       FactoryGirl.create(:access_token, tenant_id: 'u1')
       FactoryGirl.create(:access_token, tenant_id: 'u1')
-      FactoryGirl.create(:access_token, tenant_id: 'u1', active: false)
+      FactoryGirl.create(:access_token, tenant_id: 'u1').delete # with soft delete
       FactoryGirl.create(:access_token, tenant_id: 'u2')
     end
 
@@ -76,6 +75,39 @@ RSpec.describe Mes::AccessToken do
       expect(
         described_class.by_tenant_id('u1').to_a.size
       ).to eq(2)
+    end
+  end
+
+  describe '#delete' do
+    include_context 'with mes tables'
+    subject { FactoryGirl.create(:access_token, tenant_id: 'u1') }
+
+    it 'stores deactivated_at' do
+      Timecop.freeze do
+        expect { subject.delete }
+          .to change { subject.deactivated_at }
+          .from(0).to Time.now.to_f
+      end
+    end
+
+    it 'stores deactivated status' do
+      expect { subject.delete }
+        .to change { subject.status }
+        .from('VALID').to 'DEACTIVATED'
+    end
+
+    it 'makes it inactive' do
+      expect { subject.delete }
+        .to change { subject.active? }
+        .from(true).to false
+    end
+
+    it 'keeps it in DB' do
+      subject.delete
+      loaded_item = described_class.find_without_soft_deletion(subject.id)
+      expect(loaded_item).not_to be_nil
+      expect(loaded_item).not_to be_active
+      expect(loaded_item.status).to eq 'DEACTIVATED'
     end
   end
 

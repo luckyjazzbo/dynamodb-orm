@@ -19,6 +19,10 @@ module Mes
         @custom_options = {}
       end
 
+      def empty?
+        count == 0
+      end
+
       def scan?
         @is_scan
       end
