@@ -2,7 +2,7 @@ module Mes
   class Playlist < ::Mes::Dynamo::Model
     include ::Mes::ContentId
     include ::Mes::Dynamo::Timestamps
-    include ::Mes::Dynamo::SoftDeletion
+    acts_as_soft_deletable
 
     TYPES = %w(dynamic static).freeze
 

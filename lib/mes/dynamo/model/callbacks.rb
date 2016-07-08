@@ -10,6 +10,10 @@ module Mes
           store_callback(:before_update, block)
         end
 
+        def before_delete(&block)
+          store_callback(:before_delete, block)
+        end
+
         def before_save(&block)
           store_callback(:before_save, block)
         end

@@ -2,16 +2,16 @@ module Mes
   class AccessToken < ::Mes::Dynamo::Model
     include ::Mes::ContentId
     include ::Mes::Dynamo::Timestamps
+    acts_as_soft_deletable(field: :deactivated_at)
 
     TYPES          = %w(EMBED WEB APP S2S INTERNAL TENANT).freeze
     DEVISE_CLASSES = %w(BROWSER MOBILE SETTOPBOX SMARTTV HBBTV GAMECONSOLE HDMISTICK).freeze
-    STATUSES       = %w(valid blocked).freeze
+    STATUSES       = %w(VALID DEACTIVATED).freeze
 
     table name: "mes-access-tokens-#{RACK_ENV}"
 
     field :access_token,  type: :string
     field :tenant_id,     type: :string
-    field :active,        type: :boolean, default: true
     field :type,          type: :string,  default: 'EMBED'
     field :device_class,  type: :string,  default: 'BROWSER'
     field :title,         type: :string
@@ -22,10 +22,8 @@ module Mes
 
     field :initialization_vector, type: :string
     field :algorithm_version,     type: :number, default: 1
-    field :status,                type: :string, default: 'valid'
 
     table_index :tenant_id, name: 'tenant_id_index'
-    table_index :status,    name: 'status_index'
 
     before_create do
       # We need 32-chars string, so we should pass 24 as a param to urlsafe_base64
@@ -40,7 +38,14 @@ module Mes
 
     validates :type,         inclusion: { in: TYPES }
     validates :device_class, inclusion: { in: DEVISE_CLASSES }
-    validates :status,       inclusion: { in: STATUSES }
+
+    def active?
+      deactivated_at == 0
+    end
+
+    def status
+      active? ? 'VALID' : 'DEACTIVATED'
+    end
 
     def asset_type
       'access_token'
@@ -48,9 +53,7 @@ module Mes
 
     class << self
       def by_tenant_id(tenant_id)
-        index('tenant_id_index')
-          .where(tenant_id: tenant_id)
-          .select(&:active?) # TODO: refactor method to return a chain, not an array
+        index('tenant_id_index').where(tenant_id: tenant_id)
       end
     end
   end
