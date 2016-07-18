@@ -15,7 +15,10 @@ RSpec.describe Mes::Dynamo::Model do
   )
 
   class Movie < Mes::Dynamo::Model
-    field :title
+    field :title,       type: :string
+    field :int_field,   type: :integer
+    field :float_field, type: :float
+    field :complex_field
   end
 
   let(:id) { 'v-global' }
@@ -58,6 +61,39 @@ RSpec.describe Mes::Dynamo::Model do
       it 'writes an attribute' do
         movie.write_attribute(:title, title)
         expect(movie.title).to eq(title)
+      end
+    end
+
+    context 'type casting' do
+      it 'casts to float' do
+        movie.write_attribute(:float_field, '124.25')
+        expect(movie.float_field).to eq 124.25
+        expect(movie.float_field).to be_kind_of Float
+      end
+
+      it 'casts to integer' do
+        movie.write_attribute(:int_field, '124.25')
+        expect(movie.int_field).to eq 124
+        expect(movie.int_field).to be_kind_of Integer
+      end
+
+      it 'casts to string' do
+        movie.write_attribute(:title, 124.25)
+        expect(movie.title).to eq '124.25'
+        expect(movie.title.class).to be String
+      end
+
+      it 'never stores BigDecimal' do
+        movie.write_attribute(
+          :complex_field,
+          a: BigDecimal.new(123),
+          b: [BigDecimal.new(123), BigDecimal.new(123)],
+          c: { d: { e: BigDecimal.new(123) } }
+        )
+        expect(movie.complex_field[:a]).to be_kind_of Float
+        expect(movie.complex_field[:b][0]).to be_kind_of Float
+        expect(movie.complex_field[:b][1]).to be_kind_of Float
+        expect(movie.complex_field[:c][:d][:e]).to be_kind_of Float
       end
     end
 

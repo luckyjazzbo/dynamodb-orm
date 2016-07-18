@@ -21,7 +21,7 @@ module Mes
     field :s2s_check_remote_ip,    type: :boolean
 
     field :initialization_vector, type: :string
-    field :algorithm_version,     type: :number, default: 1
+    field :algorithm_version,     type: :integer, default: 1
 
     table_index :tenant_id, name: 'tenant_id_index'
 

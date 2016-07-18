@@ -2,8 +2,8 @@ module Mes
   module Dynamo
     module Timestamps
       def self.included(base)
-        base.field :created_at, type: :number
-        base.field :updated_at, type: :number
+        base.field :created_at, type: :float
+        base.field :updated_at, type: :float
 
         base.before_create do
           self.created_at = current_time
@@ -17,8 +17,7 @@ module Mes
       private
 
       def current_time
-        # DynamoDB gem stores numbers as BigDecimal
-        ::BigDecimal.new Time.now.to_f, 16
+        Time.now.to_f
       end
     end
   end

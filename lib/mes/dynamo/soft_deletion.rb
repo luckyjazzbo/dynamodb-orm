@@ -40,7 +40,7 @@ module Mes
               end
             end
             table_index_without_soft_deletion deleted_at_key, projection: 'KEYS_ONLY'
-            field deleted_at_key, type: :number, default: 0
+            field deleted_at_key, type: :float, default: 0
             alias_method_chain :delete, :soft_deletion
           end
         end
@@ -48,8 +48,7 @@ module Mes
         private
 
         def current_time
-          # DynamoDB gem stores numbers as BigDecimal
-          ::BigDecimal.new Time.now.to_f, 16
+          Time.now.to_f
         end
       end
 
@@ -77,7 +76,7 @@ module Mes
         def table_index_with_soft_deletion(hash_field, settings = {})
           settings[:name]  ||= TableIndex.new(hash_field, settings).name
           settings[:range] ||= []
-          settings[:range]  << deleted_at_key
+          settings[:range] <<  deleted_at_key
           table_index_without_soft_deletion(hash_field, settings)
         end
 

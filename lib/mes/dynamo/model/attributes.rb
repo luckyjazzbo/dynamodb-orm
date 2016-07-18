@@ -5,7 +5,7 @@ module Mes
         attr_reader :attributes
 
         def init_attributes(attrs)
-          @attributes = {}
+          @attributes = {}.with_indifferent_access
           assign_attributes(attrs.stringify_keys)
 
           cls.fields.each do |field_name, field|
@@ -19,15 +19,19 @@ module Mes
         end
 
         def read_attribute(name)
-          attributes[name.to_s]
+          attributes[name]
         end
 
         def write_attribute(name, value)
-          attributes[name.to_s] = value if attribute?(name)
+          attributes[name] = field(name).cast_type(value) if attribute?(name)
+        end
+
+        def field(name)
+          cls.fields[name]
         end
 
         def attribute?(name)
-          (cls.primary_key == name.to_s) || (cls.fields && cls.fields.key?(name.to_s))
+          cls.fields && cls.fields.key?(name)
         end
 
         def assign_attributes(attributes)
