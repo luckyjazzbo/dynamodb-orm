@@ -11,7 +11,7 @@ FactoryGirl.define do
         'asset_type' => 'video',
         'modified_at' => 12334325245,
         'clip_duration' => 12312,
-        'image' => { 'url' => 'http://image.example.com/image' }
+        'image' => { 'url' => 'http://image.example.com/image' },
         'id' => content_id
       }
     end
