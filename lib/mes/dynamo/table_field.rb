@@ -4,7 +4,8 @@ module Mes
       TYPES = {
         string:     'S',
         string_set: 'SS',
-        number:     'N',
+        integer:    'N',
+        float:      'N',
         number_set: 'NS',
         binary:     'B',
         binary_set: 'BS',
@@ -19,10 +20,9 @@ module Mes
       def initialize(field_name, settings)
         @name = field_name.to_sym
         @default = settings[:default]
-        if settings.key?(:type)
-          @type = settings[:type].to_sym
-          validate_type!
-        end
+        return unless settings.key?(:type)
+        @type = settings[:type].to_sym
+        validate_type!
       end
 
       def default?
@@ -45,7 +45,34 @@ module Mes
         type == :boolean
       end
 
+      def cast_type(value)
+        case type
+        when :float
+          value.to_f
+        when :integer
+          value.to_i
+        when :string
+          value.to_s
+        else
+          deep_cast_float_types value
+        end
+      end
+
       private
+
+
+      def deep_cast_float_types(value)
+        case value
+        when Hash
+          value.each { |key, val| value[key] = deep_cast_float_types(val) }
+          value
+        when Array
+          value.map! { |val| deep_cast_float_types(val) }
+        when BigDecimal
+          value.to_f
+        else value
+        end
+      end
 
       def validate_type!
         raise InvalidFieldType, "Unknown field type '#{type}'" if type && !TYPES.key?(type)

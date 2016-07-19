@@ -39,12 +39,12 @@ RSpec.describe Mes::Dynamo::Timestamps do
         expect(subject.created_at).to be_present
       end
 
-      it 'returns BigDecimal' do
-        expect(subject.created_at).to be_a(BigDecimal)
+      it 'returns Float' do
+        expect(subject.created_at).to be_a(Float)
       end
 
-      it 'returns BigDecimal after reload' do
-        expect(SampleObject.find(subject.uuid).created_at).to be_a(BigDecimal)
+      it 'returns Float after reload' do
+        expect(SampleObject.find(subject.uuid).created_at).to be_a(Float)
       end
 
       it 'does not change on saves' do
@@ -77,12 +77,12 @@ RSpec.describe Mes::Dynamo::Timestamps do
         expect(subject.updated_at).to be_present
       end
 
-      it 'returns BigDecimal' do
-        expect(subject.updated_at).to be_a(BigDecimal)
+      it 'returns Float' do
+        expect(subject.updated_at).to be_a(Float)
       end
 
-      it 'returns BigDecimal after reload' do
-        expect(SampleObject.find(subject.uuid).updated_at).to be_a(BigDecimal)
+      it 'returns Float after reload' do
+        expect(SampleObject.find(subject.uuid).updated_at).to be_a(Float)
       end
 
       it 'changes on saves' do

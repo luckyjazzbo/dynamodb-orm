@@ -2,21 +2,34 @@ module Mes
   module Dynamo
     class Model
       module TableActions
+        attr_reader :primary_key
+
+        def primary_key_field(name, opts = {})
+          undef_field(@primary_key) if @primary_key
+          @primary_key = name.to_s
+          field(name, opts)
+        end
+
+        def inherited(subclass)
+          # primary_key can be redefined if necessary
+          subclass.primary_key_field('id')
+        end
+
         def table_name
           @table_name || name.tableize
         end
 
-        def primary_key
-          @primary_key || 'id'
-        end
-
         def table(opts = {})
-          @table_name  = opts[:name].to_s        if opts[:name].present?
-          @primary_key = opts[:primary_key].to_s if opts[:primary_key].present?
+          @table_name = opts[:name].to_s if opts[:name].present?
+          primary_key_field(opts[:primary_key]) if opts.key? :primary_key
         end
 
         def field(name, settings = {})
           fields[name] = TableField.new(name, settings)
+        end
+
+        def undef_field(name)
+          fields.delete(name)
         end
 
         def fields

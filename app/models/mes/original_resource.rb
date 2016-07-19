@@ -6,7 +6,7 @@ module Mes
           primary_key: :uuid
 
     field :content_id, type: :string
-    field :period,     type: :number
+    field :period,     type: :integer
     field :data, default: -> { {} }
 
     table_index :period, range: :created_at, name: 'period_created_at_index'

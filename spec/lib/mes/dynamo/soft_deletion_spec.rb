@@ -126,8 +126,8 @@ RSpec.describe Mes::Dynamo::Model do
         table name: 'sample_objects', primary_key: :uuid
 
         field :title, type: :string
-        field :field1, type: :number
-        field :field2, type: :number
+        field :field1, type: :float
+        field :field2, type: :float
 
         table_index :field1
         table_index :field2, name: 'field2_index'
@@ -146,8 +146,8 @@ RSpec.describe Mes::Dynamo::Model do
         table name: 'sample_objects', primary_key: :uuid
 
         field :title, type: :string
-        field :field1, type: :number
-        field :field2, type: :number
+        field :field1, type: :float
+        field :field2, type: :float
 
         table_index :field1
         table_index :field2, name: 'field2_index'
