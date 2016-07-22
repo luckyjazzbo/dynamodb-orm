@@ -2,12 +2,15 @@ module Mes
   class OriginalResource < ::Mes::Dynamo::Model
     include ::Mes::Dynamo::Timestamps
 
+    READY = 'READY'.freeze
+
     table name: "lte-original-resources-#{RACK_ENV}",
           primary_key: :uuid
 
     field :content_id, type: :string
     field :period,     type: :integer
-    field :data, default: -> { {} }
+    field :data,          default: -> { {} }
+    field :children_data, default: -> { {} }
 
     table_index :period, range: :created_at, name: 'period_created_at_index'
 
@@ -25,6 +28,10 @@ module Mes
 
     def asset_type
       data['asset_type']
+    end
+
+    def ready?
+      data['status'] == READY
     end
   end
 end
