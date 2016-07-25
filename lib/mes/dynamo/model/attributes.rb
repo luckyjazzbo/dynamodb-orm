@@ -40,6 +40,11 @@ module Mes
           end
         end
 
+        def <=>(other)
+          return -1 if primary_key.nil? || other.try(:primary_key).nil? || !other.is_a?(self.class)
+          primary_key <=> other.primary_key
+        end
+
         def method_missing(name, *args)
           if attribute?(name)
             read_attribute(name)
