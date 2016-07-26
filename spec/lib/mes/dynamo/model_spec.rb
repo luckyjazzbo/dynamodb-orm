@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Mes::Dynamo::Model do
   include_context(
     'with dynamodb table',
-    :movies,
+    'movies',
     attribute_definitions: [{
       attribute_name: 'id',
       attribute_type: 'S'
@@ -203,6 +203,23 @@ RSpec.describe Mes::Dynamo::Model do
     it 'deletes items' do
       movie.delete
       expect(Movie.count).to eq 0
+    end
+  end
+
+  describe '#<=>' do
+    let(:movie_1) { Movie.new(id: 'test') }
+    let(:movie_2) { Movie.new(id: 'test') }
+
+    it 'returns -1 for nil' do
+      expect(movie_1.<=>(nil)).to eq(-1)
+    end
+
+    it 'returns -1 for different type' do
+      expect(movie_1.<=>('bla')).to eq(-1)
+    end
+
+    it 'returns 0 for a different object with same primary_key' do
+      expect(movie_1.<=>(movie_2)).to eq(0)
     end
   end
 
