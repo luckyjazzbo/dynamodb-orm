@@ -8,6 +8,7 @@ module Mes
           primary_key: :uuid
 
     field :content_id, type: :string
+    field :version,    type: :integer
     field :period,     type: :integer
     field :data,          default: -> { {} }
     field :children_data, default: -> { {} }
@@ -25,6 +26,7 @@ module Mes
 
     validates :uuid,       presence: true
     validates :content_id, presence: true
+    validates :version,    presence: true, numericality: { only_integer: true }
     validates :period,     presence: true
 
     def asset_type
