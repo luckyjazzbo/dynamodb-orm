@@ -19,6 +19,7 @@ module Mes
 
     field :s2s_ip_whitelist_range, type: :string_set
     field :s2s_check_remote_ip,    type: :boolean
+    field :web_domain,             type: :string_set
 
     field :initialization_vector, type: :string
     field :algorithm_version,     type: :integer, default: 1
