@@ -6,8 +6,16 @@ FactoryGirl.define do
     period     { Mes::PeriodHelper.current }
     data do
       {
-        'content_id' => content_id,
-        'asset_type' => 'video'
+        'id'          => content_id,
+        'asset_type'  => 'video',
+        'version'     => version,
+        'tenant_id'   => "t-#{SecureRandom.base64}",
+        'status'      => 'READY',
+        'language'    => 'en',
+        'copyright'   => 'This is mine',
+        'duration'    => 1111.11,
+        'created_at'  => 1234234212,
+        'modified_at' => created_at
       }
     end
   end
