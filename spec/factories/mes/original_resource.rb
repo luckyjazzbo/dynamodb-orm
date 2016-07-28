@@ -15,7 +15,13 @@ FactoryGirl.define do
         'copyright'   => 'This is mine',
         'duration'    => 1111.11,
         'created_at'  => 1234234212,
-        'modified_at' => created_at
+        'modified_at' => created_at,
+        'age_ratings' => {
+          'FSK'  => 'FSK12',
+          'CARA' => 'PG13'
+        },
+        'start_date_absolute' => '2016-07-28 10:23:54+00',
+        'end_date_absolute'   => '2016-07-28 10:23:54+00'
       }
     end
   end
