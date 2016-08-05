@@ -13,8 +13,7 @@ module Mes
       self.token ||= SecureRandom.urlsafe_base64(32)
     end
 
-    validates :token,   presence: true
-    validates :email,   presence: true
+    validates :email,   presence: true, email: true
     validates :user_id, presence: true
   end
 end
