@@ -1,5 +1,4 @@
-language: ruby
-rvm: 2.2
+language: python
 sudo: required
 cache:
   directories:
@@ -9,10 +8,14 @@ cache:
 services:
   - docker
 
+env:
+  # encrypted aws keys
+  - secure: "IiVC4qHGi2Ou49XVaAHZl78XzvMtno9pKpZjEXXZM7ll31V+AzLWsaS5VPOgmun3yqdfWqwYOCewFwkF2r0NIl87CGv0bMZqMDaeoBgzN+yTvtIQR/reWasgcXZjvNTvuEq68ZVGVB+GyDu2AS5Dz0aO6SWtMiU8czrKKRMN8+Ut7yJR8kshvA9bCSe56Dio+xOv9AjM/BuIrpC5nDt+E90HPh/qs9p6oYlmymSPRPj9wUvF3DiWWrscVVS07+HZ5vTOj8JL3+kJRqS7a48eQmFSgtCKEvHxzohvrrdhJHPqVXmsYm42irX6zCzQLa3AH+L5nRf+LcgoRA+MCVMjccBgGzYOUS/qHMXI22UQeYzB2W9griRAUYgG+bcNuNMcMg5/sEDyeqNeZnJxACz6/6EaL3ePg3cCO9l2mK8elOg7K4V9xwqyEFZgFO8QcWQGORbrgW/32IwOjzHeWoBY7l+2I/0oxn1Qjjnw2Aj+e1Pnpqb08U5sDLimB0Tr3XqlFJhJ9kNxgXjbziiW8Kv2wldi6L+b1PGU0Im9mUGYxRiC77m/eYAvZuaAve/SF+setjZWykyKubOPL2mAcTGiU8gfdFWuIGK826vj/TTz0grj/jWuSXeuo8U7ZrJsXxwPDzGDgCbEIyzgauGOYiJVnSg5p1P3TgTWSc7Tiqc3fpM="
 
 install:
   - sudo apt-get update -qq
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install -qq docker-engine
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+  - sudo pip install awscli --ignore-installed six
 
 before_script:
   - mkdir -p downloads
@@ -24,4 +27,5 @@ before_script:
   - sudo cp downloads/docker-compose /usr/local/bin
 
 script:
-  - docker-compose run app bundle exec rspec
+  - eval $(aws ecr get-login --region eu-west-1)
+  - docker-compose -f docker-compose.travis.yml run app bundle exec rspec

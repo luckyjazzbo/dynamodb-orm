@@ -28,6 +28,7 @@ require 'mes/dynamo/version'
 
 require 'helpers/period_helper'
 require 'helpers/content_id_service_client'
+require 'validators/email_validator'
 require 'models/mes/concerns/content_id'
 
 module Mes
