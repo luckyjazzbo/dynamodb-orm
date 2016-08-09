@@ -27,6 +27,15 @@ module Mes
         def chain_with_scan
           chain(scan: true)
         end
+
+        module InstanceMethods
+          def reload!
+            raise InvalidQuery, 'Cannot reload an object without primary key' if id.blank?
+            response = cls.client_execute(:get_item, key: { cls.primary_key => id })
+            init_attributes(response.item)
+            self
+          end
+        end
       end
     end
   end

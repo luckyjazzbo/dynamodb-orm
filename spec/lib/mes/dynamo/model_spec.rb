@@ -21,9 +21,9 @@ RSpec.describe Mes::Dynamo::Model do
     field :complex_field
   end
 
-  let(:id) { 'v-global' }
-  let(:title)      { 'The Secret Life of Walter Mitty' }
-  let(:movie)      { Movie.new }
+  let(:id)    { 'v-global' }
+  let(:title) { 'The Secret Life of Walter Mitty' }
+  let(:movie) { Movie.new }
 
   describe '#primary_key' do
     class TableWithCustomPrimaryKey < Mes::Dynamo::Model
@@ -295,6 +295,29 @@ RSpec.describe Mes::Dynamo::Model do
     it 'truncates tables' do
       Movie.truncate!
       expect(Movie.count).to eq(0)
+    end
+  end
+
+  describe '#reload!' do
+    context 'with id' do
+      let(:new_title) { 'new title' }
+      let!(:movie) { Movie.create!(id: id, title: title) }
+
+      before do
+        Movie.find(id).update_attributes(title: new_title)
+      end
+
+      it 'reloads an object' do
+        expect { movie.reload! }.to change { movie.title }.from(title).to(new_title)
+      end
+    end
+
+    context 'without id' do
+      let(:movie) { Movie.new(title: title) }
+
+      it 'raises error' do
+        expect { movie.reload! }.to raise_error ::Mes::Dynamo::InvalidQuery
+      end
     end
   end
 end
