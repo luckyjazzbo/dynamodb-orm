@@ -31,7 +31,7 @@ module Mes
         module InstanceMethods
           def reload!
             raise InvalidQuery, 'Cannot reload an object without primary key' if id.blank?
-            response = cls.client_execute(:get_item, key: { cls.primary_key => id })
+            response = cls.client_execute(:get_item, key: { cls.primary_key => public_send(cls.primary_key) })
             init_attributes(response.item)
             self
           end
