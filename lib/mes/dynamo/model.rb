@@ -7,6 +7,7 @@ module Mes
       extend Relations
       extend AllowsSoftDeletion
       include ActiveModel::Validations
+      include LookupMethods::InstanceMethods
       include Execution
       include Attributes
       include CRUDActions
