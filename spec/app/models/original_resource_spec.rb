@@ -34,22 +34,4 @@ RSpec.describe Mes::OriginalResource do
       end
     end
   end
-
-  describe '#ready?' do
-    context 'when ready' do
-      subject { Mes::OriginalResource.new(context_id: 'xxx', data: { 'status' => 'READY' }) }
-
-      it 'returns true' do
-        expect(subject.ready?).to eq(true)
-      end
-    end
-
-    context 'when not ready' do
-      subject { Mes::OriginalResource.new(context_id: 'xxx', data: { 'status' => 'NOT_READY' }) }
-
-      it 'returns false' do
-        expect(subject.ready?).to eq(false)
-      end
-    end
-  end
 end

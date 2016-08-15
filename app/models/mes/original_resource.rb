@@ -32,9 +32,5 @@ module Mes
     def asset_type
       data['asset_type']
     end
-
-    def ready?
-      data['status'] == READY
-    end
   end
 end
