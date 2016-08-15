@@ -2,8 +2,6 @@ module Mes
   class OriginalResource < ::Mes::Dynamo::Model
     include ::Mes::Dynamo::Timestamps
 
-    READY = 'READY'.freeze
-
     table name: "lte-original-resources-#{RACK_ENV}",
           primary_key: :uuid
 
