@@ -14,7 +14,7 @@ FactoryGirl.define do
         'copyright'   => 'This is mine',
         'duration'    => 1111.11,
         'created_at'  => 1234234212,
-        'modified_at' => created_at,
+        'modified_at' => 1234234222,
         'title' => {
           'en' => 'Awesome video',
           'de' => 'Großartiges Video'
