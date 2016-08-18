@@ -5,6 +5,10 @@ cache:
     - .bundle
     - downloads
 
+branches:
+  only:
+    - master
+
 services:
   - docker
 

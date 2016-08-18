@@ -13,6 +13,15 @@ module Mes
     validates :content_id,             presence: true
     validates :original_resource_uuid, presence: true
 
+    def self.create_from_original_resource!(original_resource, transformed_data)
+      create!(
+        uuid: SecureRandom.uuid,
+        content_id: original_resource.content_id,
+        original_resource_uuid: original_resource.uuid,
+        data: transformed_data
+      )
+    end
+
     def asset_type
       data['asset_type']
     end
