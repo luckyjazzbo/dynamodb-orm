@@ -15,6 +15,14 @@ FactoryGirl.define do
         'duration'    => 1111.11,
         'created_at'  => 1234234212,
         'modified_at' => created_at,
+        'title' => {
+          'en' => 'Awesome video',
+          'de' => 'Großartiges Video'
+        },
+        'description' => {
+          'en' => 'You gonna watch this again',
+          'de' => 'Sie beobachten werde auch in diesem'
+        },
         'age_ratings' => {
           'FSK'  => 'FSK12',
           'CARA' => 'PG13'
