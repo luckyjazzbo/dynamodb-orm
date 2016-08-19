@@ -11,7 +11,7 @@ module Mes
     belongs_to :original_resource, class_name: 'Mes::OriginalResource',
                                    foreign_key: :original_resource_uuid
 
-    table_index :content_id, name: 'content_id_at_index'
+    table_index :content_id, name: 'content_id_index'
 
     before_create do
       self.uuid ||= SecureRandom.uuid

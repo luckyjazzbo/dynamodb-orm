@@ -12,7 +12,7 @@ module Mes
     field :children_data, default: -> { {} }
 
     table_index :period, range: :created_at, name: 'period_created_at_index'
-    table_index :content_id, name: 'content_id_at_index'
+    table_index :content_id, name: 'content_id_index'
 
     before_create do
       self.uuid ||= SecureRandom.uuid
