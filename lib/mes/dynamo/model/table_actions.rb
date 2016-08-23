@@ -51,7 +51,7 @@ module Mes
 
         def drop_table!
           client.delete_table(table_name: table_name)
-        rescue Aws::DynamoDB::Errors::ResourceNotFoundException
+        rescue ::Aws::DynamoDB::Errors::ResourceNotFoundException
           false
         end
       end

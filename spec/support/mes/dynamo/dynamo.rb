@@ -26,7 +26,7 @@ module DynamoDBSpecHelpers
 
   def table_exists?(table_name)
     describe_table(table_name)[:table_status] == 'ACTIVE'
-  rescue Aws::DynamoDB::Errors::ResourceNotFoundException
+  rescue ::Aws::DynamoDB::Errors::ResourceNotFoundException
     false
   end
 

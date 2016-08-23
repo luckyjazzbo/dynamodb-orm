@@ -27,7 +27,7 @@ module Mes
 
           def execute(&block)
             instance_exec(&block)
-          rescue Aws::DynamoDB::Errors::ServiceError => origin_error
+          rescue ::Aws::DynamoDB::Errors::ServiceError => origin_error
             raise Mes::Dynamo::GenericError.mes_error_for(origin_error)
           end
         end
