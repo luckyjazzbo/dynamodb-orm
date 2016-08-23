@@ -12,9 +12,9 @@ module Mes
 
       def self.mes_error_class_for(origin_error)
         case origin_error
-        when Aws::DynamoDB::Errors::ResourceNotFoundException
+        when ::Aws::DynamoDB::Errors::ResourceNotFoundException
           TableDoesNotExist
-        when Aws::DynamoDB::Errors::ValidationException
+        when ::Aws::DynamoDB::Errors::ValidationException
           if origin_error.message.include? 'ExpressionAttributeValues'
             InvalidQuery
           else
