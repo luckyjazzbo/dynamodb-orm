@@ -48,7 +48,7 @@ FactoryGirl.define do
             'ad_groups' => [
               {
                 'geolocation' => 'en',
-                'sales_house_id' => 't-tratatatata',
+                'sales_house' => 't-tratatatata',
                 'reach_measured' => { 'postrolls' => ['begin-[__VIDEOID__]-end'] }
               }
             ]
