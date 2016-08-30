@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 FactoryGirl.define do
   factory :original_resource, class: 'Mes::OriginalResource' do
     uuid       { SecureRandom.uuid }
@@ -36,7 +37,11 @@ FactoryGirl.define do
     children_data do
       {
         'images' => [
-          { 'id' => 'i-321', 'url' => 'http://url' }
+          {
+            'id' => 'i-321',
+            'url' => 'http://url',
+            'url_encrypted' => 'http://url/encrypted'
+          }
         ],
 
         'taxonomies' => [
