@@ -46,7 +46,7 @@ module Mes
             index_name: index.name,
             key_schema: key_schema_for(index),
             projection: { projection_type: 'ALL' },
-            provisioned_throughput: index_provisioned_throughput
+            provisioned_throughput: index_provisioned_throughput(index.name)
           }
         end
       end
@@ -64,17 +64,22 @@ module Mes
       end
 
       def table_provisioned_throughput
-        {
-          read_capacity_units: 1,
-          write_capacity_units: 1
-        }
+        Mes::Dynamo::PROVISIONING_CONFIG
+          .fetch(env_insensitive_table_name)
+          .except('indices')
+          .symbolize_keys
       end
 
-      def index_provisioned_throughput
-        {
-          read_capacity_units: 1,
-          write_capacity_units: 1
-        }
+      def index_provisioned_throughput(index_name)
+        Mes::Dynamo::PROVISIONING_CONFIG
+          .fetch(env_insensitive_table_name)
+          .fetch('indices')
+          .fetch(index_name)
+          .symbolize_keys
+      end
+
+      def env_insensitive_table_name
+        model_class.table_name.gsub("-#{RACK_ENV}", '')
       end
     end
   end

@@ -37,6 +37,19 @@ module DynamoDBSpecHelpers
     end
   end
 
+  def min_provisioning
+    { 'read_capacity_units' => 1, 'write_capacity_units' => 1 }
+  end
+
+  def define_provisioning_for(model)
+    name = model.table_name.gsub("-#{RACK_ENV}", '')
+    Mes::Dynamo::PROVISIONING_CONFIG[name] = min_provisioning
+    model.table_indices.each do |_, index|
+      Mes::Dynamo::PROVISIONING_CONFIG[name]['indices'] ||= {}
+      Mes::Dynamo::PROVISIONING_CONFIG[name]['indices'][index.name] = min_provisioning
+    end
+  end
+
   def truncate_table(table_name, opts)
     primary_key = opts[:key_schema][0][:attribute_name]
     response = dynamodb_client.scan(
