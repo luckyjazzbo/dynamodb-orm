@@ -7,6 +7,7 @@ RSpec.describe Mes::Dynamo::TableCreator do
     end
 
     before do
+      define_provisioning_for(ModelWithoutFieldsAndIndices)
       drop_table(ModelWithoutFieldsAndIndices.table_name)
     end
 
@@ -33,6 +34,7 @@ RSpec.describe Mes::Dynamo::TableCreator do
     end
 
     before do
+      define_provisioning_for(ModelWithFieldsWithoutIndices)
       drop_table(ModelWithFieldsWithoutIndices.table_name)
     end
 
@@ -62,6 +64,7 @@ RSpec.describe Mes::Dynamo::TableCreator do
     end
 
     before do
+      define_provisioning_for(ModelWithFieldsAndIndices)
       drop_table(ModelWithFieldsAndIndices.table_name)
     end
 

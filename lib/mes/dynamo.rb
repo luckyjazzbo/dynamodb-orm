@@ -30,6 +30,7 @@ require 'helpers/period_helper'
 require 'helpers/content_id_service_client'
 require 'validators/email_validator'
 require 'models/mes/concerns/content_id'
+require 'yaml'
 
 module Mes
   module Dynamo
@@ -37,6 +38,9 @@ module Mes
     autoload :Chain,      'mes/dynamo/chain'
 
     ROOT = File.expand_path('../../../', __FILE__)
+    PROVISIONING_CONFIG = YAML.load_file(
+      File.join(Dynamo::ROOT, 'config/provisioning.yml')
+    ).fetch(RACK_ENV)
 
     cattr_writer :logger
 

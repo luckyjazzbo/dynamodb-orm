@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 RSpec.shared_examples_for 'soft-deletable' do
-  before(:each) { model_name.create_table! }
+  before(:each) do
+    define_provisioning_for(model_name)
+    model_name.create_table!
+  end
   after(:each) { model_name.drop_table! }
   let(:uuid) { SecureRandom.uuid }
   let(:title) { 'Just random string' }
