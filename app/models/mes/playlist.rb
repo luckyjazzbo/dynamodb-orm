@@ -8,12 +8,15 @@ module Mes
 
     table name: "mes-playlists-#{RACK_ENV}"
 
+    field :parent_id,  type: :string
     field :tenant_id,  type: :string
     field :creator_id, type: :string
+
     field :title,      type: :string
     field :type,       type: :string
     field :query,      type: :map
 
+    table_index :parent_id, name: 'parent_id_index'
     table_index :tenant_id, name: 'tenant_id_index'
 
     validates :tenant_id,  presence: true
@@ -22,13 +25,24 @@ module Mes
     validates :query,      presence: true
     validates :type,       presence: true, inclusion: { in: TYPES }
 
-    def asset_type
-      'playlist'
+    class << self
+      def by_tenant_id(tenant_id)
+        find_by(:tenant_id, tenant_id)
+      end
+
+      def by_parent_id(parent_id)
+        find_by(:parent_id, parent_id)
+      end
+
+      private
+
+      def find_by(column, value)
+        index("#{column}_index").where(column => value)
+      end
     end
 
-    def self.by_tenant_id(tenant_id)
-      index('tenant_id_index')
-        .where(tenant_id: tenant_id)
+    def asset_type
+      'playlist'
     end
   end
 end
