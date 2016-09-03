@@ -8,16 +8,20 @@ module Mes
       end
 
       def create
-        table_settings = {
+        client.create_table(table_settings)
+      end
+
+      def table_settings
+        @table_settings ||= {
           table_name:               model_class.table_name,
           attribute_definitions:    attribute_definitions,
           key_schema:               key_schema,
           provisioned_throughput:   table_provisioned_throughput
-        }
-        if global_secondary_indexes.present?
-          table_settings[:global_secondary_indexes] = global_secondary_indexes
+        }.tap do |settings|
+          if global_secondary_indexes.present?
+            settings[:global_secondary_indexes] = global_secondary_indexes
+          end
         end
-        client.create_table(table_settings)
       end
 
       private
@@ -33,7 +37,7 @@ module Mes
             defs << { attribute_name: field.name.to_s, attribute_type: field.dynamodb_type }
           end
         end
-        defs
+        defs.sort_by {|ad| ad[:attribute_name]}
       end
 
       def key_schema
@@ -48,7 +52,7 @@ module Mes
             projection: { projection_type: 'ALL' },
             provisioned_throughput: index_provisioned_throughput(index.name)
           }
-        end
+        end.sort_by { |index| index[:index_name] }
       end
 
       def key_schema_for(index)
