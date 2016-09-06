@@ -52,14 +52,13 @@ module Mes
         when :integer
           value.to_i
         when :string
-          value.to_s
+          value.to_s.empty? ? nil : value.to_s
         else
           deep_cast_float_types value
         end
       end
 
       private
-
 
       def deep_cast_float_types(value)
         case value
