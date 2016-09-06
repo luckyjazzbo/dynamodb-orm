@@ -6,7 +6,7 @@ module Mes
     CONTACT_REQUEST_TYPES = %w(content_owner publisher).freeze
 
     table name: "mes-contact-requests-#{RACK_ENV}",
-          primary_key: :email
+          primary_key: :uuid
 
     field :email,      type: :string
     field :email_hash, type: :string
@@ -18,6 +18,10 @@ module Mes
     validates :email,  presence: true, email: true
     validates :type,   presence: true, inclusion: { in: CONTACT_REQUEST_TYPES }
     validates :domain, presence: true
+
+    before_create do
+      self.uuid ||= SecureRandom.uuid
+    end
 
     before_save do
       self.email_hash = Digest::SHA1.hexdigest(email)
