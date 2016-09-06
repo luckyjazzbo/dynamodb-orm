@@ -51,6 +51,10 @@ test: &minimum
         read_capacity_units: 1
         write_capacity_units: 1
 
+  mes-contact-requests:
+    read_capacity_units: 1
+    write_capacity_units: 1
+
 development:
   <<: *minimum
 
@@ -107,6 +111,10 @@ qa: &medium
         read_capacity_units: 10
         write_capacity_units: 10
 
+  mes-contact-requests:
+    read_capacity_units: 3
+    write_capacity_units: 3
+
 staging:
   <<: *medium
 
@@ -162,3 +170,7 @@ prod: &maximum
       content_id_index:
         read_capacity_units: 80
         write_capacity_units: 80
+
+  mes-contact-requests:
+    read_capacity_units: 5
+    write_capacity_units: 5
