@@ -16,6 +16,10 @@ module Mes
           end
         end
 
+        def find_by(column, value)
+          index("#{column}_index").where(column => value)
+        end
+
         def count
           client_execute(:describe_table, {}).table.item_count
         end

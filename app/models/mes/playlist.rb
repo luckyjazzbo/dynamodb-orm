@@ -33,12 +33,6 @@ module Mes
       def by_parent_id(parent_id)
         find_by(:parent_id, parent_id)
       end
-
-      private
-
-      def find_by(column, value)
-        index("#{column}_index").where(column => value)
-      end
     end
 
     def asset_type
