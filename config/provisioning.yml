@@ -54,6 +54,10 @@ test: &minimum
   mes-contact-requests:
     read_capacity_units: 1
     write_capacity_units: 1
+    indices:
+      email_index:
+        read_capacity_units: 1
+        write_capacity_units: 1
 
 development:
   <<: *minimum
@@ -114,6 +118,11 @@ qa: &medium
   mes-contact-requests:
     read_capacity_units: 3
     write_capacity_units: 3
+    indices:
+      email_index:
+        read_capacity_units: 3
+        write_capacity_units: 3
+
 
 staging:
   <<: *medium
@@ -174,3 +183,8 @@ prod: &maximum
   mes-contact-requests:
     read_capacity_units: 5
     write_capacity_units: 5
+    indices:
+      email_index:
+        read_capacity_units: 5
+        write_capacity_units: 5
+

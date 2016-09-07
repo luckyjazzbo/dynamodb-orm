@@ -8,6 +8,8 @@ module Mes
     table name: "mes-contact-requests-#{RACK_ENV}",
           primary_key: :uuid
 
+    table_index :email, name: 'email_index'
+
     field :email,      type: :string
     field :email_hash, type: :string
     field :type,       type: :string
