@@ -144,7 +144,8 @@ module Mes
         else
           opts[:select] = select_fields || 'ALL_ATTRIBUTES'
         end
-        opts.merge(custom_options)
+
+        opts.deep_merge(custom_options)
       end
 
       def query_only_options

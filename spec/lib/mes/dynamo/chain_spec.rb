@@ -259,6 +259,26 @@ RSpec.describe Mes::Dynamo::Chain do
         }.to raise_error ::Mes::Dynamo::InvalidOrder
       end
     end
+
+    describe 'protected methods' do
+      describe '#filter_options' do
+        before do
+          create_movie(:avatar)
+          chain_with_title_index.custom_options = { expression_attribute_values: { ":the_good" => "The Bad" } }
+        end
+
+        let(:expression_attribute_values) do
+          chain_with_title_index.send(:filter_options)[:expression_attribute_values]
+        end
+
+        it 'deep merge old and new values' do
+          expect(expression_attribute_values).to eq(
+            ":title" => "Avatar",
+            ":the_good" => "The Bad"
+          )
+        end
+      end
+    end
   end
 
   private
