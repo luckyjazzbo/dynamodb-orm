@@ -3,14 +3,6 @@ module Mes
     class Chain
       include Enumerable
 
-      attr_accessor :model_class,
-                    :filters,
-                    :index_name,
-                    :direction,
-                    :limit_of_results,
-                    :select_fields,
-                    :custom_options
-
       def initialize(model_class, opts = {})
         @model_class = model_class
         @is_scan = opts[:scan]
@@ -29,7 +21,7 @@ module Mes
 
       def raw(opts)
         dup.tap do |chain|
-          chain.custom_options.merge!(opts)
+          chain.custom_options.deep_merge!(opts)
         end
       end
 
@@ -48,6 +40,15 @@ module Mes
         dup.tap do |chain|
           chain.update_filter(expression, values)
         end
+      end
+
+      def filter(expression, values = {})
+        if expression.is_a?(Hash)
+          values = expression
+          expression = build_expression_from_values(expression)
+        end
+
+        raw(filter_expression: expression, expression_attribute_values: format_values(values))
       end
 
       def index(index_name)
@@ -108,6 +109,14 @@ module Mes
 
       protected
 
+      attr_accessor :model_class,
+                    :filters,
+                    :index_name,
+                    :direction,
+                    :limit_of_results,
+                    :select_fields,
+                    :custom_options
+
       def update_filter(expression, values)
         filters << {
           expression: expression,
@@ -124,13 +133,14 @@ module Mes
       end
 
       def expression_attribute_values
-        values = {}
-        filters.map do |filter|
-          filter[:values].each do |key, value|
-            values[":#{key}"] = value
-          end
+        filters.map { |filter| format_values(filter[:values]) }
+               .reduce({}, :merge)
+      end
+
+      def format_values(values)
+        values.each_with_object({}) do |(key, value), hash|
+          hash[":#{key}"] = value
         end
-        values
       end
 
       def filter_options
