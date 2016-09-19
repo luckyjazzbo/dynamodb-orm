@@ -25,6 +25,14 @@ module Mes
     validates :query,      presence: true
     validates :type,       presence: true, inclusion: { in: TYPES }
 
+    def dynamic?
+      type == 'dynamic'
+    end
+
+    def static?
+      type == 'static'
+    end
+
     class << self
       def by_tenant_id(tenant_id)
         find_by(:tenant_id, tenant_id)
