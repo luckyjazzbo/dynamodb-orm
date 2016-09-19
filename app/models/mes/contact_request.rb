@@ -8,18 +8,19 @@ module Mes
     table name: "mes-contact-requests-#{RACK_ENV}",
           primary_key: :uuid
 
-    table_index :email, name: 'email_index'
+    table_index :email,       name: 'email_index'
+    table_index :tenant_type, name: 'tenant_type_index'
 
-    field :email,      type: :string
-    field :email_hash, type: :string
-    field :type,       type: :string
-    field :domain,     type: :string
-    field :name,       type: :string
-    field :message,    type: :string
+    field :email,             type: :string
+    field :email_hash,        type: :string
+    field :tenant_type,       type: :string
+    field :domain,            type: :string
+    field :name,              type: :string
+    field :message,           type: :string
 
-    validates :email,  presence: true, email: true
-    validates :type,   presence: true, inclusion: { in: CONTACT_REQUEST_TYPES }
-    validates :domain, presence: true
+    validates :email,         presence: true, email: true
+    validates :tenant_type,   presence: true, inclusion: { in: CONTACT_REQUEST_TYPES }
+    validates :domain,        presence: true
 
     before_create do
       self.uuid ||= SecureRandom.uuid

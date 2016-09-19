@@ -58,6 +58,9 @@ test: &minimum
       email_index:
         read_capacity_units: 1
         write_capacity_units: 1
+      tenant_type_index:
+        read_capacity_units: 1
+        write_capacity_units: 1
 
 development:
   <<: *minimum
@@ -120,6 +123,9 @@ qa: &medium
     write_capacity_units: 3
     indices:
       email_index:
+        read_capacity_units: 3
+        write_capacity_units: 3
+      tenant_type_index:
         read_capacity_units: 3
         write_capacity_units: 3
 
@@ -185,6 +191,9 @@ prod: &maximum
     write_capacity_units: 5
     indices:
       email_index:
+        read_capacity_units: 5
+        write_capacity_units: 5
+      tenant_type_index:
         read_capacity_units: 5
         write_capacity_units: 5
 

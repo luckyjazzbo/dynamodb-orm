@@ -11,6 +11,9 @@ RSpec.describe Mes::Dynamo::Chain do
       attribute_name: 'title',
       attribute_type: 'S'
     }, {
+      attribute_name: 'description',
+      attribute_type: 'S'
+    }, {
       attribute_name: 'created_at',
       attribute_type: 'N'
     }],
@@ -22,6 +25,19 @@ RSpec.describe Mes::Dynamo::Chain do
       index_name: 'title_index',
       key_schema: [{
         attribute_name: 'title',
+        key_type: 'HASH'
+      }],
+      projection: {
+        projection_type: 'ALL'
+      },
+      provisioned_throughput: {
+        read_capacity_units: 1,
+        write_capacity_units: 1
+      }
+    },{
+      index_name: 'description_index',
+      key_schema: [{
+        attribute_name: 'description',
         key_type: 'HASH'
       }],
       projection: {
@@ -52,9 +68,11 @@ RSpec.describe Mes::Dynamo::Chain do
 
   class Movie < Mes::Dynamo::Model
     field :title
+    field :description
     field :created_at
 
     table_index :title, name: 'title_index'
+    table_index :description, name: 'description_index'
     table_index :title, range: :created_at, name: 'title_created_at_index'
   end
 
@@ -132,7 +150,7 @@ RSpec.describe Mes::Dynamo::Chain do
 
     describe '#index' do
       it 'updates query index' do
-        expect(subject.index('test').index_name).to eq 'test'
+        expect(subject.index('test').send(:index_name)).to eq 'test'
       end
     end
 
@@ -145,6 +163,40 @@ RSpec.describe Mes::Dynamo::Chain do
 
       it 'limits results' do
         expect { |block| chain_with_title_index.limit(1).each(&block) }.to yield_control.once
+      end
+    end
+
+    describe '#filter' do
+      before do
+        create_movie(:superman)
+        create_movie(:superman, description: "I'm Clark Kent")
+        create_movie(:avatar)
+      end
+
+      let(:base_query) { subject.index('title_index').where(title: 'Superman') }
+
+      context 'when hash passed' do
+        let(:query) { base_query.filter(description: "I'm Clark Kent") }
+
+        it 'do not override base query' do
+          expect(query.first.title).to eq('Superman')
+        end
+
+        it 'filter query properly' do
+          expect(query.count).to eq(1)
+        end
+      end
+
+      context 'when expression and values passed' do
+        let(:query) { base_query.filter('description = :description', description: "I'm Clark Kent") }
+
+        it 'do not override base query' do
+          expect(query.first.title).to eq('Superman')
+        end
+
+        it 'filter query properly' do
+          expect(query.count).to eq(1)
+        end
       end
     end
 
@@ -266,7 +318,8 @@ RSpec.describe Mes::Dynamo::Chain do
   def create_movie(name, attrs_overrides = {})
     attrs = {
       'id' => "m-#{rand(999_999)}",
-      'created_at' => Time.now.to_i
+      'created_at' => Time.now.to_i,
+      'description' => "I'm Batman."
     }.merge(attrs_overrides)
 
     case name
