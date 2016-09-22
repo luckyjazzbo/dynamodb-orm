@@ -8,6 +8,7 @@ FactoryGirl.define do
     data do
       {
         'id'          => content_id,
+        'source_id'   => '269557',
         'asset_type'  => 'video',
         'version'     => version,
         'tenant_id'   => "t-#{SecureRandom.base64}",
@@ -30,7 +31,13 @@ FactoryGirl.define do
         },
         'start_date_absolute' => '2016-07-28 10:23:54+00',
         'end_date_absolute'   => '2016-07-28 10:23:54+00',
-        'status'              => 'READY'
+        'geo_locations'       => [],
+        'keywords' => [
+          "Abenteuet Auto",
+          "BMW 325 ti Compact",
+          "VW Golf V6 4 Motion",
+          "Video"
+        ]
       }
     end
 
