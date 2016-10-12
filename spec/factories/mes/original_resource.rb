@@ -29,8 +29,8 @@ FactoryGirl.define do
           'FSK'  => 'FSK12',
           'CARA' => 'PG13'
         },
-        'start_date_absolute' => '2016-07-28 10:23:54+00',
-        'end_date_absolute'   => '2016-07-28 10:23:54+00',
+        'start_date_absolute' => 1469690634,
+        'end_date_absolute'   => 1469691634,
         'geo_locations'       => [],
         'keywords' => [
           "Abenteuet Auto",
