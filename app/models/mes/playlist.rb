@@ -8,13 +8,16 @@ module Mes
 
     table name: "mes-playlists-#{RACK_ENV}"
 
-    field :parent_id,  type: :string
-    field :tenant_id,  type: :string
-    field :creator_id, type: :string
+    field :parent_id,                  type: :string
+    field :tenant_id,                  type: :string
+    field :creator_id,                 type: :string
 
-    field :title,      type: :string
-    field :type,       type: :string
-    field :query,      type: :map
+    field :next_playlist_id,           type: :string
+    field :next_playlist_updated_at,   type: :float
+
+    field :title,                      type: :string
+    field :type,                       type: :string
+    field :query,                      type: :map
 
     table_index :parent_id, name: 'parent_id_index'
     table_index :tenant_id, name: 'tenant_id_index'
