@@ -1,10 +1,10 @@
 module DynamoDBSpecHelpers
   def create_table(table_name, opts)
     dynamodb_client.create_table(
-      opts.merge(
+      {
         table_name: table_name,
         provisioned_throughput: { read_capacity_units: 1, write_capacity_units: 1 }
-      )
+      }.merge(opts)
     )
     wait_till_table_create(table_name)
   end
@@ -33,6 +33,13 @@ module DynamoDBSpecHelpers
   def wait_till_table_create(table_name)
     100.times do
       break if table_exists?(table_name)
+      sleep 0.02
+    end
+  end
+
+  def wait_till_table_removed(table_name)
+    100.times do
+      break unless table_exists?(table_name)
       sleep 0.02
     end
   end

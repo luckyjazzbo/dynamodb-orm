@@ -49,6 +49,26 @@ module Mes
           TableCreator.new(self).create
         end
 
+        def update_table!(force: false)
+          TableUpdater.new(self).update(force: force)
+        end
+
+        def table_exists?
+          describe_table.present?
+        end
+
+        def ensure_table!
+          table_exists? ? update_table! : create_table!
+        end
+
+        def table_settings
+          TableCreator.new(self).table_settings
+        end
+
+        def describe_table
+          TableDescriber.new(self).state
+        end
+
         def drop_table!
           client.delete_table(table_name: table_name)
         rescue ::Aws::DynamoDB::Errors::ResourceNotFoundException
