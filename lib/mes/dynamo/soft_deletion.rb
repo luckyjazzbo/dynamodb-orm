@@ -75,17 +75,20 @@ module Mes
 
         def table_index_with_soft_deletion(hash_field, settings = {})
           settings[:name]  ||= TableIndex.new(hash_field, settings).name
-          settings[:range] ||= []
-          settings[:range] <<  deleted_at_key
+          settings[:range] ||= [deleted_at_key]
           table_index_without_soft_deletion(hash_field, settings)
         end
 
         private
 
         def chain_with_deleted_items(index_name, chain_opts = {})
-          chain_without_soft_deletion(chain_opts)
-            .index(index_name)
-            .where("#{deleted_at_key} = :zero", zero: 0)
+          chain = chain_without_soft_deletion(chain_opts).index(index_name)
+
+          if table_indices[index_name].has_key?(deleted_at_key)
+            chain.where("#{deleted_at_key} = :zero", zero: 0)
+          else
+            chain.filter("#{deleted_at_key} = :zero", zero: 0)
+          end
         end
       end
     end

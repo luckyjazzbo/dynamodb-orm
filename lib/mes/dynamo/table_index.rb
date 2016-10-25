@@ -13,6 +13,10 @@ module Mes
         [hash] + range
       end
 
+      def has_key?(key)
+        all_fields.include? key
+      end
+
       private
 
       def cleanup_range(range)

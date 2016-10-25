@@ -8,7 +8,7 @@ RSpec.shared_examples_for 'soft-deletable' do
   after(:each) { model_name.drop_table! }
   let(:uuid) { SecureRandom.uuid }
   let(:title) { 'Just random string' }
-  subject! { model_name.create!(uuid: uuid, title: title, field1: 1, field2: 1) }
+  subject! { model_name.create!(uuid: uuid, title: title, field1: 1, field2: 1, field3: 1) }
 
   describe '#delete' do
     it 'adds deleted_at_field to object' do
@@ -95,20 +95,31 @@ RSpec.shared_examples_for 'soft-deletable' do
 
   describe '#chain' do
     before do
-      model_name.create!(uuid: SecureRandom.uuid, title: title + '1', field1: 1, field2: 1)
-      model_name.create!(uuid: SecureRandom.uuid, title: title + '2', field1: 2, field2: 2)
-      model_name.create!(uuid: SecureRandom.uuid, title: title + '3', field1: 3, field2: 3)
+      model_name.create!(uuid: SecureRandom.uuid, title: title + '1', field1: 1, field2: 1, field3: 1)
+      model_name.create!(uuid: SecureRandom.uuid, title: title + '2', field1: 2, field2: 2, field3: 2)
+      model_name.create!(uuid: SecureRandom.uuid, title: title + '3', field1: 3, field2: 3, field3: 3)
     end
 
-    it 'allows to query within index with name' do
-      expect { subject.delete }
-        .to change { model_name.index('field1_index').where(field1: 1).count }
-        .from(2).to(1)
-    end
+    context 'requests without filters' do
+      before do
+        expect_any_instance_of(Mes::Dynamo::Chain).not_to receive :filter
+      end
 
-    it 'allows to query within index without name' do
+      it 'allows to query within index with name' do
+        expect { subject.delete }
+          .to change { model_name.index('field1_index').where(field1: 1).count }
+          .from(2).to(1)
+      end
+
+      it 'allows to query within index without name' do
+        expect { subject.delete }
+          .to change { model_name.index('field2_index').where(field2: 1).count }
+          .from(2).to(1)
+      end
+    end
+    it 'allows to query within index with range' do
       expect { subject.delete }
-        .to change { model_name.index('field2_index').where(field2: 1).count }
+        .to change { model_name.index('field3_field2_index').where(field3: 1, field2: 1).count }
         .from(2).to(1)
     end
 
@@ -131,9 +142,11 @@ RSpec.describe Mes::Dynamo::Model do
         field :title, type: :string
         field :field1, type: :float
         field :field2, type: :float
+        field :field3, type: :float
 
         table_index :field1
         table_index :field2, name: 'field2_index'
+        table_index :field3, range: [:field2], name: 'field3_field2_index'
       end
 
       let(:model_name) { SampleObject }
@@ -151,9 +164,11 @@ RSpec.describe Mes::Dynamo::Model do
         field :title, type: :string
         field :field1, type: :float
         field :field2, type: :float
+        field :field3, type: :float
 
         table_index :field1
         table_index :field2, name: 'field2_index'
+        table_index :field3, range: [:field2], name: 'field3_field2_index'
       end
 
       let(:model_name) { OtherSampleObject }
