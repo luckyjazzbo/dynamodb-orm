@@ -3,6 +3,21 @@ require 'spec_helper'
 RSpec.describe Mes::Playlist do
   described_class::TYPES.each do |type|
     describe "##{type}" do
+      context 'denies saving duplicates' do
+        include_context 'with mes tables'
+        let(:title) { SecureRandom.uuid }
+        let(:tenant_id) { 't-' + SecureRandom.uuid }
+        let(:invalid_playlist) { FactoryGirl.build(:playlist, title: title, tenant_id: tenant_id) }
+        before do
+          FactoryGirl.create(:playlist, title: title, tenant_id: tenant_id)
+        end
+
+        it 'returns validation error' do
+          expect(invalid_playlist).not_to be_valid
+          expect(invalid_playlist.errors[:title]).to eq ['should be unique within tenant']
+        end
+      end
+
       it "responds to #{type}" do
         is_expected.to respond_to("#{type}?")
       end

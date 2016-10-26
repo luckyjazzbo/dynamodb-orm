@@ -21,12 +21,21 @@ module Mes
 
     table_index :parent_id, name: 'parent_id_index'
     table_index :tenant_id, name: 'tenant_id_index'
+    table_index :tenant_id, range: [:title]
 
     validates :tenant_id,  presence: true
     validates :creator_id, presence: true
     validates :title,      presence: true
     validates :query,      presence: true
     validates :type,       presence: true, inclusion: { in: TYPES }
+
+    validate :uniqueness_of_title_in_tenant_scope
+
+    def uniqueness_of_title_in_tenant_scope
+      duplicates = self.class.index(:tenant_id_title_index)
+                       .where(tenant_id: tenant_id, title: title)
+      errors.add(:title, 'should be unique within tenant') if duplicates.count > 0
+    end
 
     def dynamic?
       type == 'dynamic'

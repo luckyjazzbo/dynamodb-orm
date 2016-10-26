@@ -31,6 +31,10 @@ test: &minimum
       parent_id_index:
         read_capacity_units: 1
         write_capacity_units: 1
+      tenant_id_title_index:
+        read_capacity_units: 1
+        write_capacity_units: 1
+
 
   lte-original-resources:
     read_capacity_units: 1
@@ -96,6 +100,9 @@ qa: &medium
         read_capacity_units: 5
         write_capacity_units: 2
       parent_id_index:
+        read_capacity_units: 5
+        write_capacity_units: 2
+      tenant_id_title_index:
         read_capacity_units: 5
         write_capacity_units: 2
 
@@ -165,6 +172,9 @@ prod: &maximum
         write_capacity_units: 20
       parent_id_index:
         read_capacity_units: 80
+        write_capacity_units: 20
+      tenant_id_title_index:
+        read_capacity_units: 20
         write_capacity_units: 20
 
   lte-original-resources:
