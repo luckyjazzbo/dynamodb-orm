@@ -28,7 +28,8 @@ module Mes
 
         def delete_with_soft_deletion
           cls.run_callbacks(self, :before_delete)
-          update_attributes(deleted_at_key => current_time)
+          assign_attributes(deleted_at_key => current_time)
+          cls.client_execute(:put_item, item: attributes)
           @persisted = false
         end
 
