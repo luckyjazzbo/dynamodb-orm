@@ -7,6 +7,7 @@ module Mes
         @model_class = model_class
         @is_scan = opts[:scan]
         @filters = []
+        @post_filters = []
         @direction = 'asc'
         @custom_options = {}
       end
@@ -48,7 +49,9 @@ module Mes
           expression = build_expression_from_values(expression)
         end
 
-        raw(filter_expression: expression, expression_attribute_values: format_values(values))
+        dup.tap do |chain|
+          chain.post_filters << { expression: expression, values: values }
+        end
       end
 
       def index(index_name)
@@ -115,7 +118,8 @@ module Mes
                     :direction,
                     :limit_of_results,
                     :select_fields,
-                    :custom_options
+                    :custom_options,
+                    :post_filters
 
       def update_filter(expression, values)
         filters << {
@@ -144,7 +148,7 @@ module Mes
       end
 
       def filter_options
-        opts = scan? ? scan_only_options : query_only_options
+        opts = query_only_options.deep_merge(post_filters_options)
         opts[:index_name] = index_name  if index_name.present?
         opts[:limit] = limit_of_results if limit_of_results.present?
 
@@ -158,23 +162,24 @@ module Mes
         opts.deep_merge(custom_options)
       end
 
+      def post_filters_options
+        used_filters = scan? ? post_filters + filters : post_filters
+        return {} if used_filters.empty?
+        {
+          filter_expression: used_filters
+            .map { |f| f[:expression] }.join(' AND '),
+          expression_attribute_values: used_filters
+            .map { |f| format_values(f[:values]) }.reduce({}, :merge)
+        }
+      end
+
       def query_only_options
+        return {} if scan?
         {
           key_condition_expression: filter_expression,
           expression_attribute_values: expression_attribute_values,
           scan_index_forward: (direction == 'asc')
         }
-      end
-
-      def scan_only_options
-        if filter_expression.present?
-          {
-            filter_expression: filter_expression,
-            expression_attribute_values: expression_attribute_values
-          }
-        else
-          {}
-        end
       end
 
       def execute(extra_options = {})
