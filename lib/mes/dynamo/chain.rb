@@ -6,8 +6,8 @@ module Mes
       def initialize(model_class, opts = {})
         @model_class = model_class
         @is_scan = opts[:scan]
+        @where_filters = []
         @filters = []
-        @post_filters = []
         @direction = 'asc'
         @custom_options = {}
       end
@@ -50,7 +50,7 @@ module Mes
         end
 
         dup.tap do |chain|
-          chain.post_filters << { expression: expression, values: values }
+          chain.filters << { expression: expression, values: values }
         end
       end
 
@@ -113,16 +113,16 @@ module Mes
       protected
 
       attr_accessor :model_class,
-                    :filters,
+                    :where_filters,
                     :index_name,
                     :direction,
                     :limit_of_results,
                     :select_fields,
                     :custom_options,
-                    :post_filters
+                    :filters
 
       def update_filter(expression, values)
-        filters << {
+        where_filters << {
           expression: expression,
           values: values
         }
@@ -133,11 +133,11 @@ module Mes
       end
 
       def filter_expression
-        filters.map { |filter| filter[:expression] }.join(' AND ')
+        where_filters.map { |filter| filter[:expression] }.join(' AND ')
       end
 
       def expression_attribute_values
-        filters.map { |filter| format_values(filter[:values]) }
+        where_filters.map { |filter| format_values(filter[:values]) }
                .reduce({}, :merge)
       end
 
@@ -147,8 +147,8 @@ module Mes
         end
       end
 
-      def filter_options
-        opts = query_only_options.deep_merge(post_filters_options)
+      def where_filters_options
+        opts = query_only_options.deep_merge(filters_options)
         opts[:index_name] = index_name  if index_name.present?
         opts[:limit] = limit_of_results if limit_of_results.present?
 
@@ -162,8 +162,8 @@ module Mes
         opts.deep_merge(custom_options)
       end
 
-      def post_filters_options
-        used_filters = scan? ? post_filters + filters : post_filters
+      def filters_options
+        used_filters = scan? ? filters + where_filters : filters
         return {} if used_filters.empty?
         {
           filter_expression: used_filters
@@ -183,7 +183,7 @@ module Mes
       end
 
       def execute(extra_options = {})
-        options = filter_options.merge(extra_options)
+        options = where_filters_options.merge(extra_options)
         if scan?
           model_class.client_execute(:scan, options)
         else
