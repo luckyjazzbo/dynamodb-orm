@@ -21,6 +21,8 @@ RSpec.shared_examples_for 'soft-deletable' do
       it 'ignores validations' do
         expect { subject.delete }.to change { model_name.count }.by(-1)
       end
+
+      after { model_name.clear_validators! }
     end
 
     it 'adds deleted_at_field to object' do

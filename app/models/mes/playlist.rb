@@ -36,6 +36,7 @@ module Mes
       duplicates = self.class.index(:tenant_id_title_index)
                        .where(tenant_id: tenant_id, title: title)
                        .filter('id <> :id', id: id)
+                       .filter('attribute_not_exists(parent_id)')
       errors.add(:title, 'should be unique within tenant') if duplicates.count > 0
     end
 
