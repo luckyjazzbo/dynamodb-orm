@@ -11,6 +11,20 @@ RSpec.shared_examples_for 'soft-deletable' do
   subject! { model_name.create!(uuid: uuid, title: title, field1: 1, field2: 1, field3: 1) }
 
   describe '#delete' do
+    context 'when record is invalid before deletion' do
+      before do
+        expect(subject).to be_valid
+        model_name.validates(:field4, presence: true)
+        expect(subject).not_to be_valid
+      end
+
+      it 'ignores validations' do
+        expect { subject.delete }.to change { model_name.count }.by(-1)
+      end
+
+      after { model_name.clear_validators! }
+    end
+
     it 'adds deleted_at_field to object' do
       mocked_time = Time.now
       allow(Time).to receive(:now).and_return mocked_time
@@ -143,6 +157,7 @@ RSpec.describe Mes::Dynamo::Model do
         field :field1, type: :float
         field :field2, type: :float
         field :field3, type: :float
+        field :field4, type: :float
 
         table_index :field1
         table_index :field2, name: 'field2_index'
@@ -165,6 +180,7 @@ RSpec.describe Mes::Dynamo::Model do
         field :field1, type: :float
         field :field2, type: :float
         field :field3, type: :float
+        field :field4, type: :float
 
         table_index :field1
         table_index :field2, name: 'field2_index'
