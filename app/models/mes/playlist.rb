@@ -32,6 +32,7 @@ module Mes
     validate :uniqueness_of_title_in_tenant_scope
 
     def uniqueness_of_title_in_tenant_scope
+      return if parent_id # skip this validation for recommendation playlists
       duplicates = self.class.index(:tenant_id_title_index)
                        .where(tenant_id: tenant_id, title: title)
       errors.add(:title, 'should be unique within tenant') if duplicates.count > 0
