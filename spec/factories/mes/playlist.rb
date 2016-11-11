@@ -2,7 +2,7 @@ FactoryGirl.define do
   sequence(:playlist_title) { |n| "Playlist number ##{n}" }
 
   factory :playlist, class: 'Mes::Playlist' do
-    id            { 'p-' + SecureRandom.urlsafe_base64(16) }
+    id            { 'pl-' + SecureRandom.urlsafe_base64(16) }
     tenant_id     { 't-' + SecureRandom.urlsafe_base64(16) }
     creator_id    { 't-' + SecureRandom.urlsafe_base64(16) }
     title         { generate :playlist_title }
