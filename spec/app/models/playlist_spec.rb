@@ -41,4 +41,21 @@ RSpec.describe Mes::Playlist do
       end
     end
   end
+
+  describe '#next_playlist_outdated?' do
+    context 'when next_playlist_updated_at is nil' do
+      subject { FactoryGirl.build(:playlist, next_playlist_updated_at: nil) }
+      it { is_expected.to be_next_playlist_outdated }
+    end
+
+    context 'when next_playlist_updated_at is more than an hour old' do
+      subject { FactoryGirl.build(:playlist, next_playlist_updated_at: Time.now.to_f - 60 * 60 - 1) }
+      it { is_expected.to be_next_playlist_outdated }
+    end
+
+    context 'when next_playlist_updated_at just now' do
+      subject { FactoryGirl.build(:playlist, next_playlist_updated_at: Time.now.to_f) }
+      it { is_expected.not_to be_next_playlist_outdated }
+    end
+  end
 end

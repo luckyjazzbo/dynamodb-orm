@@ -5,6 +5,7 @@ module Mes
     acts_as_soft_deletable
 
     TYPES = %w(dynamic static).freeze
+    NEXT_PLAYLIST_UPDATE_INTERVAL_SECONDS = 60 * 60
 
     table name: "mes-playlists-#{RACK_ENV}"
 
@@ -12,12 +13,14 @@ module Mes
     field :tenant_id,                  type: :string
     field :creator_id,                 type: :string
 
-    field :next_playlist_id,           type: :string
-    field :next_playlist_updated_at,   type: :float
-
     field :title,                      type: :string
     field :type,                       type: :string
     field :query,                      type: :map
+
+    field :next_playlist_updated_at, type: :float
+
+    belongs_to :next_playlist, class_name: 'Mes::Playlist',
+                               foreign_key: :next_playlist_id # TODO: Rename to next_playlist_uuid
 
     table_index :parent_id, name: 'parent_id_index'
     table_index :tenant_id, name: 'tenant_id_index'
@@ -48,6 +51,14 @@ module Mes
       type == 'static'
     end
 
+    def next_playlist_outdated?
+      next_playlist_updated_at.to_f + NEXT_PLAYLIST_UPDATE_INTERVAL_SECONDS < Time.now.to_f
+    end
+
+    def asset_type
+      'playlist'
+    end
+
     class << self
       def by_tenant_id(tenant_id)
         find_by(:tenant_id, tenant_id)
@@ -56,10 +67,6 @@ module Mes
       def by_parent_id(parent_id)
         find_by(:parent_id, parent_id)
       end
-    end
-
-    def asset_type
-      'playlist'
     end
   end
 end
