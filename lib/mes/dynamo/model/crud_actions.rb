@@ -12,10 +12,16 @@ module Mes
           @persisted = true
         end
 
-        def update_attributes(attributes)
+        def update_attributes!(attributes)
           cls.run_callbacks(self, :before_update)
           assign_attributes(attributes)
-          save
+          save!
+        end
+
+        def update_attributes(attributes)
+          update_attributes!(attributes)
+        rescue Dynamo::GenericError
+          false
         end
 
         def save!

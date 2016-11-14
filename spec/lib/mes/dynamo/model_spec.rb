@@ -183,6 +183,15 @@ RSpec.describe Mes::Dynamo::Model do
     end
   end
 
+  describe '#update_attributes!' do
+    let(:attributes) { { 'id' => id, 'title' => title } }
+
+    it 'saves new object' do
+      movie.update_attributes!(attributes)
+      expect(Movie.find(id).attributes).to eq(attributes)
+    end
+  end
+
   describe '#update_attributes' do
     let(:attributes) { { 'id' => id, 'title' => title } }
 
