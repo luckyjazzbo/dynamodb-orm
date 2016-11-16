@@ -6,11 +6,11 @@ module Mes
         base.field :updated_at, type: :float
 
         base.before_create do
-          self.created_at = current_time
+          self.created_at = attributes[:created_at] || current_time
         end
 
         base.before_save do
-          self.updated_at = current_time
+          self.updated_at = (persisted? ? nil : attributes[:updated_at]) || current_time
         end
       end
 

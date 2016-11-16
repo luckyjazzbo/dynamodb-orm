@@ -1,10 +1,11 @@
 module Mes
   module Dynamo
     class TableUpdater
-      attr_reader :model_class
+      attr_reader :model_class, :logger
 
-      def initialize(model_class)
+      def initialize(model_class, opts = {})
         @model_class = model_class
+        @logger = opts[:logger] || Logger.new(STDOUT)
       end
 
       def update(force: false)
@@ -37,7 +38,7 @@ module Mes
 
       def wait_for_status_active
         until table_status_active?
-          puts "Waiting for ACTIVE status for table #{new_state[:table_name]}"
+          logger.info "Waiting for ACTIVE status for table #{new_state[:table_name]}"
           sleep 0.5
         end
       end
@@ -136,8 +137,8 @@ module Mes
                 "Index key_schema updates detected for indices: #{names}." \
                 'Use force key to recreate indices (with downtime).'
         else
-          puts "Index key_schema updates detected for indices: #{names}." \
-               'That indices will be recreated. Downtime expected.'
+          logger.info "Index key_schema updates detected for indices: #{names}." \
+                      'That indices will be recreated. Downtime expected.'
         end
       end
 
