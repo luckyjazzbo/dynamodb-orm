@@ -14,6 +14,8 @@ RSpec.describe Mes::Dynamo::Timestamps do
     }]
   )
 
+  let(:timestamp) { Time.now.to_f - 1 }
+
   class SampleObject < Mes::Dynamo::Model
     include Mes::Dynamo::Timestamps
     table name: 'sample_objects', primary_key: :uuid
@@ -29,6 +31,18 @@ RSpec.describe Mes::Dynamo::Timestamps do
         }.to change {
           subject.created_at
         }.from(nil)
+      end
+    end
+
+    context 'when object is new and a value for created_at passed' do
+      subject { SampleObject.new(uuid: SecureRandom.uuid, created_at: timestamp) }
+
+      it 'is being initialized with passed value' do
+        expect {
+          subject.save!
+        }.not_to change {
+          subject.created_at
+        }
       end
     end
 
@@ -70,6 +84,18 @@ RSpec.describe Mes::Dynamo::Timestamps do
       end
     end
 
+    context 'when object is new and a value for udpated_at passed' do
+      subject { SampleObject.new(uuid: SecureRandom.uuid, updated_at: timestamp) }
+
+      it 'is being initialized with a passed value' do
+        expect {
+          subject.save!
+        }.not_to change {
+          subject.updated_at
+        }
+      end
+    end
+
     context 'when object is saved' do
       subject { SampleObject.create!(uuid: SecureRandom.uuid) }
 
@@ -92,6 +118,11 @@ RSpec.describe Mes::Dynamo::Timestamps do
         }.to change {
           subject.updated_at
         }
+      end
+
+      it 'ignores passed updated_at' do
+        subject.update_attributes!(updated_at: timestamp)
+        expect(subject.updated_at).not_to eq(timestamp)
       end
     end
   end
