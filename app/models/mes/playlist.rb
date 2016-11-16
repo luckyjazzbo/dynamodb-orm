@@ -52,7 +52,12 @@ module Mes
     end
 
     def next_playlist_outdated?
-      next_playlist_updated_at.to_f + NEXT_PLAYLIST_UPDATE_INTERVAL_SECONDS < Time.now.to_f
+      (updated_at.to_f > next_playlist_updated_at.to_f) ||
+        (Time.now.to_f - next_playlist_updated_at.to_f > NEXT_PLAYLIST_UPDATE_INTERVAL_SECONDS)
+    end
+
+    def next_playlist_actual?
+      !next_playlist_outdated?
     end
 
     def asset_type

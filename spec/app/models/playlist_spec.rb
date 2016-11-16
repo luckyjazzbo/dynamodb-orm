@@ -57,5 +57,17 @@ RSpec.describe Mes::Playlist do
       subject { FactoryGirl.build(:playlist, next_playlist_updated_at: Time.now.to_f) }
       it { is_expected.not_to be_next_playlist_outdated }
     end
+
+    context 'when a playlist was updated after last update of next_playlist' do
+      subject { FactoryGirl.build(:playlist, next_playlist_updated_at: Time.now.to_f - 1, updated_at: Time.now.to_f) }
+      it { is_expected.to be_next_playlist_outdated }
+    end
+  end
+
+  describe '#next_playlist_actual?' do
+    subject { FactoryGirl.build(:playlist, next_playlist_updated_at: nil) }
+    it 'is opposite of next_playlist_outdated?' do
+      expect(subject.next_playlist_actual?).to eq(!subject.next_playlist_outdated?)
+    end
   end
 end

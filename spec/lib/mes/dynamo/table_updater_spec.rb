@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Mes::Dynamo::TableUpdater do
-  subject { described_class.new(model_class).update }
+  let(:logger) { Logger.new('/dev/null') }
+  subject { described_class.new(model_class, logger: logger).update }
   class ModelWithoutFieldsAndIndicesForUpdate < Mes::Dynamo::Model
     table primary_key: 'test_id'
   end
@@ -164,7 +165,7 @@ RSpec.describe Mes::Dynamo::TableUpdater do
       end
 
       it 'fails because of index key_schema updates' do
-        described_class.new(model_class).update(force: true)
+        described_class.new(model_class, logger: logger).update(force: true)
         wait_till_table_create(model_class.table_name)
 
         expect(model_class.describe_table).to eq model_class.table_settings
