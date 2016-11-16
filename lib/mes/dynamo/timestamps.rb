@@ -12,9 +12,6 @@ module Mes
         base.before_save do
           passed_value = updated_at_changed? ? read_attribute(:updated_at) : nil
           write_attribute :updated_at, (passed_value || current_time)
-        end
-
-        base.after_save do
           reset_updated_at_changed
         end
       end
