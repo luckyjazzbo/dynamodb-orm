@@ -36,7 +36,7 @@ module Mes
 
         def assign_attributes(attributes)
           attributes.each do |name, value|
-            write_attribute(name, value)
+            public_send("#{name}=", value)
           end
         end
 

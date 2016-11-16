@@ -30,6 +30,8 @@ module Mes
           raise InvalidRecord, errors.full_messages.join("\n") if invalid?
           cls.client_execute(:put_item, item: attributes)
           persist!
+          cls.run_callbacks(self, :after_save)
+          true
         end
 
         def save

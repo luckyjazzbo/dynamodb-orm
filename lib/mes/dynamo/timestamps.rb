@@ -10,11 +10,33 @@ module Mes
         end
 
         base.before_save do
-          self.updated_at = (persisted? ? nil : attributes[:updated_at]) || current_time
+          passed_value = updated_at_changed? ? read_attribute(:updated_at) : nil
+          write_attribute :updated_at, (passed_value || current_time)
+        end
+
+        base.after_save do
+          reset_updated_at_changed
         end
       end
 
+      def updated_at=(timestamp)
+        updated_at_changed!
+        write_attribute :updated_at, timestamp
+      end
+
       private
+
+      def updated_at_changed!
+        @updated_at_changed = true
+      end
+
+      def updated_at_changed?
+        @updated_at_changed
+      end
+
+      def reset_updated_at_changed
+        @updated_at_changed = nil
+      end
 
       def current_time
         Time.now.to_f

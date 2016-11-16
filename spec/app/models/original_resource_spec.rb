@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Mes::OriginalResource do
   describe '#period' do
-    subject { Mes::OriginalResource.new(context_id: 'xxx', data: {}) }
+    subject { Mes::OriginalResource.new(uuid: 'xxx', data: {}) }
 
     it 'empty by default' do
       expect(subject.period).to be_nil

@@ -120,9 +120,12 @@ RSpec.describe Mes::Dynamo::Timestamps do
         }
       end
 
-      it 'ignores passed updated_at' do
-        subject.update_attributes!(updated_at: timestamp)
-        expect(subject.updated_at).not_to eq(timestamp)
+      it 'updates updated_at when passed' do
+        expect {
+          subject.update_attributes!(updated_at: timestamp)
+        }.to change {
+          subject.updated_at
+        }.to(timestamp)
       end
     end
   end
