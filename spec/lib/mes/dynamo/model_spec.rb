@@ -95,6 +95,19 @@ RSpec.describe Mes::Dynamo::Model do
         expect(movie.complex_field[:b][1]).to be_kind_of Float
         expect(movie.complex_field[:c][:d][:e]).to be_kind_of Float
       end
+
+      it 'never tries to store empty string' do
+        movie.write_attribute(
+          :complex_field,
+          a: '',
+          b: ['', ''],
+          c: { d: { e: '' } }
+        )
+        expect(movie.complex_field[:a]).to be nil
+        expect(movie.complex_field[:b][0]).to be nil
+        expect(movie.complex_field[:b][1]).to be nil
+        expect(movie.complex_field[:c][:d][:e]).to be nil
+      end
     end
 
     context 'when attribute is not defined' do

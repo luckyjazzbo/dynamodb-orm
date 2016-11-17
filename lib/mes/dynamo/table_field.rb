@@ -54,21 +54,22 @@ module Mes
         when :string
           value.to_s.empty? ? nil : value.to_s
         else
-          deep_cast_float_types value
+          deep_cast(value, BigDecimal, &:to_f)
+          deep_cast(value, String) { |val| val.empty? ? nil : val }
         end
       end
 
       private
 
-      def deep_cast_float_types(value)
+      def deep_cast(value, klass, &block)
         case value
         when Hash
-          value.each { |key, val| value[key] = deep_cast_float_types(val) }
+          value.each { |key, val| value[key] = deep_cast(val, klass, &block) }
           value
         when Array
-          value.map! { |val| deep_cast_float_types(val) }
-        when BigDecimal
-          value.to_f
+          value.map! { |val| deep_cast(val, klass, &block) }
+        when klass
+          yield value
         else value
         end
       end

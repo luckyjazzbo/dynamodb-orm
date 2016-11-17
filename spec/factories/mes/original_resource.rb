@@ -29,6 +29,7 @@ FactoryGirl.define do
           'FSK'  => 'FSK12',
           'CARA' => 'PG13'
         },
+        'deactivated_status'  => '',
         'start_date_absolute' => 1469690634,
         'end_date_absolute'   => 1469691634,
         'geo_locations'       => [],
