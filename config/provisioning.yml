@@ -46,6 +46,10 @@ test: &minimum
       content_id_index:
         read_capacity_units: 1
         write_capacity_units: 1
+      content_id_created_at_index:
+        read_capacity_units: 1
+        write_capacity_units: 1
+
 
   lte-transformed-resources:
     read_capacity_units: 1
@@ -114,6 +118,9 @@ qa: &medium
         read_capacity_units: 10
         write_capacity_units: 10
       content_id_index:
+        read_capacity_units: 10
+        write_capacity_units: 10
+      content_id_created_at_index:
         read_capacity_units: 10
         write_capacity_units: 10
 
@@ -185,6 +192,9 @@ prod: &maximum
         read_capacity_units: 80
         write_capacity_units: 80
       content_id_index:
+        read_capacity_units: 80
+        write_capacity_units: 80
+      content_id_created_at_index:
         read_capacity_units: 80
         write_capacity_units: 80
 
