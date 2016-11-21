@@ -37,12 +37,14 @@ module Mes
           base.class_eval do
             class << self
               %w(count chain table_index index find).each do |method|
-                alias_method_chain method, :soft_deletion
+                alias_method :"#{method}_without_soft_deletion", method
+                alias_method method, :"#{method}_with_soft_deletion"
               end
             end
             table_index_without_soft_deletion deleted_at_key, projection: 'KEYS_ONLY'
             field deleted_at_key, type: :float, default: 0
-            alias_method_chain :delete, :soft_deletion
+            alias_method :delete_without_soft_deletion, :delete
+            alias_method :delete, :delete_with_soft_deletion
           end
         end
 
