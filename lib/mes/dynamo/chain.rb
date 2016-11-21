@@ -192,7 +192,7 @@ module Mes
       end
 
       def logger
-        ::Mes::Dynamo.logger
+        Mes::Dynamo.logger
       end
 
       def reverse_order

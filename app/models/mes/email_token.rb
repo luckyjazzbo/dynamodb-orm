@@ -1,6 +1,6 @@
 module Mes
-  class EmailToken < ::Mes::Dynamo::Model
-    include ::Mes::Dynamo::Timestamps
+  class EmailToken < Mes::Dynamo::Model
+    include Mes::Dynamo::Timestamps
     acts_as_soft_deletable(field: :used_at)
 
     EXPIRES_IN_SECONDS = 60 * 60 * 24

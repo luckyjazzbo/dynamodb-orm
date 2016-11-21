@@ -338,7 +338,7 @@ RSpec.describe Mes::Dynamo::Model do
       let(:movie) { Movie.new(title: title) }
 
       it 'raises error' do
-        expect { movie.reload! }.to raise_error ::Mes::Dynamo::InvalidQuery
+        expect { movie.reload! }.to raise_error Mes::Dynamo::InvalidQuery
       end
     end
   end

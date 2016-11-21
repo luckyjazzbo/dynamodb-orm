@@ -13,7 +13,7 @@ RSpec.describe Mes::OriginalResource do
 
       Timecop.freeze do
         expect(subject.period).to eq(
-          ::Mes::PeriodHelper.from_unix_timestamp(Time.now.to_i)
+          Mes::PeriodHelper.from_unix_timestamp(Time.now.to_i)
         )
       end
     end

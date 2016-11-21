@@ -55,7 +55,9 @@ module Mes
     end
 
     def self.logger
-      @logger ||= Logger.new('/dev/null')
+      @logger ||= Mes::Common::LoggerWithPrefix.new(
+        Mes::Common::LoggerUtils.current_logger, '[mes-dynamo]'
+      )
     end
   end
 

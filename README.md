@@ -15,12 +15,12 @@ gem 'mes-dynamo', git: 'git@github.com:glomex/mes-dynamo.git'
 ## Usage
 
 ```ruby
-class Movie < ::Mes::Dynamo::Model
+class Movie < Mes::Dynamo::Model
   # Optional:
   table name: :sample_table, primary_key: 'custom_id'
   field :title, type: :string
 
-  include ::Mes::Dynamo::Timestamps
+  include Mes::Dynamo::Timestamps
   # Adds created_at and updated_at with auto-assigns
 end
 ```

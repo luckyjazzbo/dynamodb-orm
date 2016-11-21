@@ -1,8 +1,8 @@
 require 'digest/sha1'
 
 module Mes
-  class ContactRequest < ::Mes::Dynamo::Model
-    include ::Mes::Dynamo::Timestamps
+  class ContactRequest < Mes::Dynamo::Model
+    include Mes::Dynamo::Timestamps
     CONTACT_REQUEST_TYPES = %w(content_owner publisher).freeze
 
     table name: "mes-contact-requests-#{RACK_ENV}",

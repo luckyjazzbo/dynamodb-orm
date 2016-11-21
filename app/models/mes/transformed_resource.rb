@@ -1,6 +1,6 @@
 module Mes
-  class TransformedResource < ::Mes::Dynamo::Model
-    include ::Mes::Dynamo::Timestamps
+  class TransformedResource < Mes::Dynamo::Model
+    include Mes::Dynamo::Timestamps
 
     table name: "lte-transformed-resources-#{RACK_ENV}",
           primary_key: :uuid

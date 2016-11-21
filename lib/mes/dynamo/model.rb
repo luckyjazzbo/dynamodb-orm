@@ -19,6 +19,14 @@ module Mes
         persist! if opts[:persisted]
         cls.run_callbacks(self, :after_initialize)
       end
+
+      def self.logger
+        Mes::Dynamo.logger
+      end
+
+      def logger
+        cls.logger
+      end
     end
   end
 end

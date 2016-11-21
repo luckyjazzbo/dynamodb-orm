@@ -308,7 +308,7 @@ RSpec.describe Mes::Dynamo::Chain do
       it 'validates orders' do
         expect {
           chain_with_title_created_at_index.order('invalid')
-        }.to raise_error ::Mes::Dynamo::InvalidOrder
+        }.to raise_error Mes::Dynamo::InvalidOrder
       end
     end
   end

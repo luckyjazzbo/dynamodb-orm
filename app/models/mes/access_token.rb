@@ -1,7 +1,7 @@
 module Mes
-  class AccessToken < ::Mes::Dynamo::Model
-    include ::Mes::ContentId
-    include ::Mes::Dynamo::Timestamps
+  class AccessToken < Mes::Dynamo::Model
+    include Mes::ContentId
+    include Mes::Dynamo::Timestamps
     acts_as_soft_deletable(field: :deactivated_at)
 
     TYPES          = %w(EMBED WEB APP S2S INTERNAL TENANT).freeze

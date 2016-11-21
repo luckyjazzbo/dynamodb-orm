@@ -10,10 +10,6 @@ module Mes
           self.class
         end
 
-        def logger
-          Mes::Common::LoggerUtils.current_logger
-        end
-
         class_methods do
           def client
             @client ||= Connection.connect
@@ -22,7 +18,7 @@ module Mes
           def client_execute(method, opts)
             default_options = { table_name: table_name }
             final_options = default_options.merge(opts)
-            ::Mes::Dynamo.logger.debug "Request: #{final_options.inspect}"
+            logger.debug "Request: #{final_options.inspect}"
 
             execute do
               client.send method, final_options
