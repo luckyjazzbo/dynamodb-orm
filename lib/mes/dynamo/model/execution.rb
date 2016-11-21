@@ -10,6 +10,10 @@ module Mes
           self.class
         end
 
+        def logger
+          Mes::Common::LoggerUtils.current_logger
+        end
+
         class_methods do
           def client
             @client ||= Connection.connect

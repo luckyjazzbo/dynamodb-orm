@@ -15,12 +15,15 @@ module Mes
         def update_attributes!(attributes)
           cls.run_callbacks(self, :before_update)
           assign_attributes(attributes)
+
+          # TODO: do partial update instead of full replacement
           save!
         end
 
         def update_attributes(attributes)
           update_attributes!(attributes)
-        rescue Dynamo::GenericError
+        rescue InvalidRecord => e
+          logger.error("dynamodb error while updating #{primary_key} in #{cls.table_name}: #{e.message}")
           false
         end
 
@@ -36,7 +39,8 @@ module Mes
 
         def save
           save!
-        rescue Dynamo::GenericError
+        rescue InvalidRecord => e
+          logger.error("dynamodb error while saving to #{cls.table_name}: #{e.message}")
           false
         end
 

@@ -1,3 +1,15 @@
+GIT
+  remote: git@github.com:glomex/mes-ruby-common.git
+  revision: 6330323fc83b64b2482bfd22461c5900a4b985b4
+  specs:
+    mes-ruby-common (0.1.0)
+      airbrake-ruby (~> 1.4)
+      aws-sdk (~> 2.3)
+      dogstatsd-ruby (~> 1.6)
+      faraday (~> 0.9.2)
+      interactor
+      openid_connect (~> 0.12.0)
+
 PATH
   remote: .
   specs:
@@ -6,6 +18,7 @@ PATH
       activesupport (~> 5.0, >= 5.0.0.1)
       aws-sdk (~> 2)
       faraday (~> 0.9)
+      mes-ruby-common
       rake (~> 11.1)
 
 GEM
@@ -19,35 +32,72 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     addressable (2.4.0)
+    airbrake-ruby (1.6.0)
     ast (2.3.0)
-    aws-sdk (2.6.24)
-      aws-sdk-resources (= 2.6.24)
-    aws-sdk-core (2.6.24)
+    attr_required (1.0.1)
+    aws-sdk (2.6.26)
+      aws-sdk-resources (= 2.6.26)
+    aws-sdk-core (2.6.26)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.6.24)
-      aws-sdk-core (= 2.6.24)
+    aws-sdk-resources (2.6.26)
+      aws-sdk-core (= 2.6.26)
     aws-sigv4 (1.0.0)
+    bindata (2.3.4)
     concurrent-ruby (1.0.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
+    dogstatsd-ruby (1.6.0)
     dotenv (2.1.1)
     factory_girl (4.7.0)
       activesupport (>= 3.0.0)
-    faraday (0.10.0)
+    faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     fuubar (2.1.1)
       rspec (~> 3.0)
       ruby-progressbar (~> 1.4)
     hashdiff (0.3.0)
+    httpclient (2.8.2.4)
     i18n (0.7.0)
+    interactor (3.1.0)
     jmespath (1.3.1)
+    json (2.0.2)
+    json-jwt (1.6.5)
+      activesupport
+      bindata
+      multi_json (>= 1.3)
+      securecompare
+      url_safe_base64
+    mail (2.6.4)
+      mime-types (>= 1.16, < 4)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     minitest (5.9.1)
+    multi_json (1.12.1)
     multipart-post (2.0.0)
+    openid_connect (0.12.0)
+      activemodel
+      attr_required (>= 1.0.0)
+      json (>= 1.4.3)
+      json-jwt (>= 1.5.0)
+      rack-oauth2 (>= 1.3.1)
+      swd (>= 1.0.0)
+      tzinfo
+      validate_email
+      validate_url
+      webfinger (>= 1.0.1)
     parser (2.3.1.2)
       ast (~> 2.2)
     powerpack (0.1.1)
+    rack (2.0.1)
+    rack-oauth2 (1.4.0)
+      activesupport (>= 2.3)
+      attr_required (>= 0.0.5)
+      httpclient (>= 2.4)
+      multi_json (>= 1.3.6)
+      rack (>= 1.1)
     rainbow (2.1.0)
     rake (11.3.0)
     rspec (3.5.0)
@@ -71,11 +121,29 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
     safe_yaml (1.0.4)
+    securecompare (1.0.0)
+    swd (1.0.1)
+      activesupport (>= 3)
+      attr_required (>= 0.0.5)
+      httpclient (>= 2.4)
+      i18n
+      json (>= 1.4.3)
     thread_safe (0.3.5)
     timecop (0.8.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     unicode-display_width (1.1.0)
+    url_safe_base64 (0.2.2)
+    validate_email (0.1.6)
+      activemodel (>= 3.0)
+      mail (>= 2.2.5)
+    validate_url (1.0.2)
+      activemodel (>= 3.0.0)
+      addressable
+    webfinger (1.0.2)
+      activesupport
+      httpclient (>= 2.4)
+      multi_json
     webmock (2.1.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -90,6 +158,7 @@ DEPENDENCIES
   factory_girl (~> 4.7)
   fuubar
   mes-dynamo!
+  mes-ruby-common!
   rspec (~> 3.4)
   rubocop
   timecop (~> 0.8)

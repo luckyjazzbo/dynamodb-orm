@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'mes-ruby-common', git: 'git@github.com:glomex/mes-ruby-common.git'
+
 group :development, :test do
   gem 'rubocop', require: false
 end

@@ -18,7 +18,7 @@ module Mes
           if origin_error.message.include? 'ExpressionAttributeValues'
             InvalidQuery
           else
-            ValidationError
+            InvalidRecord
           end
         end
       end
@@ -26,12 +26,14 @@ module Mes
 
     AttributeNotDefined    = Class.new(GenericError)
     RecordNotFound         = Class.new(GenericError)
-    ValidationError        = Class.new(GenericError)
     TableDoesNotExist      = Class.new(GenericError)
     InvalidOrder           = Class.new(GenericError)
     InvalidQuery           = Class.new(GenericError)
     InvalidFieldType       = Class.new(GenericError)
     InvalidRecord          = Class.new(GenericError)
     InvalidUpdateOperation = Class.new(GenericError)
+
+    # INFO: DEPRECATED, use InvalidRecord instead
+    ValidationError        = Class.new(InvalidRecord)
   end
 end

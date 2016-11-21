@@ -7,6 +7,7 @@ require 'active_support/securerandom_base58'
 require 'active_model'
 require 'aws-sdk'
 require 'faraday'
+require 'mes-ruby-common'
 
 RACK_ENV = ENV.fetch('RACK_ENV', 'development') unless defined?(RACK_ENV)
 
