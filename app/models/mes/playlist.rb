@@ -32,7 +32,7 @@ module Mes
     validates :query,      presence: true
     validates :type,       presence: true, inclusion: { in: TYPES }
 
-    validate :uniqueness_of_title_in_tenant_scope
+    # validate :uniqueness_of_title_in_tenant_scope
 
     def uniqueness_of_title_in_tenant_scope
       return if parent_id # skip this validation for recommendation playlists
