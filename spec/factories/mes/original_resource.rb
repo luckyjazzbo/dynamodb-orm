@@ -53,7 +53,16 @@ FactoryGirl.define do
         ],
 
         'taxonomies' => [
-          { 'id' => 'tx-123' }
+          {
+            'id' => 'tx-123',
+            'parent_id' => 'p-go',
+            'title' => {
+              'de' => 'Say what again I dare you',
+              'en' => 'Say what again I dare you'
+            },
+            'type_id' => 'ty-yippie-ki-yay',
+            'image' => 'im-die'
+          }
         ],
 
         'ad_profiles' => [
