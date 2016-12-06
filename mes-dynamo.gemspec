@@ -16,13 +16,12 @@ Gem::Specification.new do |spec|
 
   spec.licenses = ['MIT']
 
-  spec.add_dependency 'activesupport', '~> 5.0', '>= 5.0.0.1'
-  spec.add_dependency 'activemodel', '~> 5.0'
-  spec.add_dependency 'aws-sdk', '~> 2'
-  spec.add_dependency 'faraday', '~> 0.9'
-  spec.add_dependency 'rake', '~> 11.1'
-  spec.add_dependency 'mes-ruby-common'
-
-  spec.add_development_dependency 'factory_girl', '~> 4.7'
-  spec.add_development_dependency 'bundler', '~> 1.10'
+  spec.add_dependency 'activesupport', '5.0.0.1'
+  spec.add_dependency 'activemodel', '5.0.0.1'
+  spec.add_dependency 'aws-sdk', '2.6.27'
+  spec.add_dependency 'faraday', '0.9.2'
+  spec.add_dependency 'rake', '11.3.0'
+  spec.add_dependency 'mes-ruby-common', '1.0.0'
+  spec.add_development_dependency 'factory_girl', '4.7.0'
+  spec.add_development_dependency 'bundler', '1.12.5'
 end
