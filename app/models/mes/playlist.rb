@@ -16,6 +16,7 @@ module Mes
     field :title,                      type: :string
     field :type,                       type: :string
     field :query,                      type: :map
+    field :video_ids,                  type: :list
 
     field :next_playlist_updated_at, type: :float
 
@@ -29,8 +30,13 @@ module Mes
     validates :tenant_id,  presence: true
     validates :creator_id, presence: true
     validates :title,      presence: true
-    validates :query,      presence: true
     validates :type,       presence: true, inclusion: { in: TYPES }
+
+    validates :query,      presence: true, if: :dynamic?
+    validates :video_ids,  absence: true,  if: :dynamic?
+
+    validates :query,      absence: true,  if: :static?
+    validates :video_ids,  presence: true, if: :static?
 
     # validate :uniqueness_of_title_in_tenant_scope
 

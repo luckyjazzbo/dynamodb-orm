@@ -42,6 +42,48 @@ RSpec.describe Mes::Playlist do
     end
   end
 
+  context 'When playlist is dynamic' do
+    subject do
+      FactoryGirl.build(:playlist, extra_params.merge(type: :dynamic))
+    end
+
+    context 'when query passed' do
+      let(:extra_params) { { query: {'some': 'query'}, video_ids: nil } }
+      it { is_expected.to be_valid }
+    end
+
+    context 'when query not passed' do
+      let(:extra_params) { { query: nil, video_ids: nil } }
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'when video_ids passed' do
+      let(:extra_params) { { query: {'some': 'query'}, video_ids: ['v-123', 'v-456', 'v-789'] } }
+      it { is_expected.not_to be_valid }
+    end
+  end
+
+  context 'When playlist is static' do
+    subject do
+      FactoryGirl.build(:playlist, extra_params.merge(type: :static))
+    end
+
+    context 'when video_ids passed' do
+      let(:extra_params) { { query: nil, video_ids: ['v-123', 'v-456', 'v-789'] } }
+      it { is_expected.to be_valid }
+    end
+
+    context 'when video_ids not passed' do
+      let(:extra_params) { { query: nil, video_ids: nil } }
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'when query passed' do
+      let(:extra_params) { { query: {'some': 'query'}, video_ids: ['v-123', 'v-456', 'v-789'] } }
+      it { is_expected.not_to be_valid }
+    end
+  end
+
   describe '#next_playlist_outdated?' do
     context 'when next_playlist_updated_at is nil' do
       subject { FactoryGirl.build(:playlist, next_playlist_updated_at: nil) }
