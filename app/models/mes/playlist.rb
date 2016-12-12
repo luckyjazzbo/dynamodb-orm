@@ -38,7 +38,7 @@ module Mes
     validates :query,      absence: true,  if: :static?
     validates :video_ids,  presence: true, if: :static?
 
-    # validate :uniqueness_of_title_in_tenant_scope
+    validate :uniqueness_of_title_in_tenant_scope
 
     def uniqueness_of_title_in_tenant_scope
       return if parent_id # skip this validation for recommendation playlists
