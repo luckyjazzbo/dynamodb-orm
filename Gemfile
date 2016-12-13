@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'mes-ruby-common', git: 'git@github.com:glomex/mes-ruby-common.git', tag: '1.0.0'
+gem 'mes-ruby-common', git: 'git@github.com:glomex/mes-ruby-common.git', tag: '1.3.1'
 
 group :development, :test do
   gem 'rubocop', require: false
