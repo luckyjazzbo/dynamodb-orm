@@ -5,7 +5,7 @@ module Mes
     table name: "lte-original-resources-#{RACK_ENV}",
           primary_key: :uuid
 
-    field :found,      type: :boolean, default: true
+    field :found,      type: :boolean, default: false
     field :content_id, type: :string
     field :version,    type: :integer
     field :period,     type: :integer

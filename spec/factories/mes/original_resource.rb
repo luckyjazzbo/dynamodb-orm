@@ -4,6 +4,7 @@ FactoryGirl.define do
     uuid       { SecureRandom.uuid }
     content_id { "v-#{SecureRandom.base64}" }
     version    { 1 }
+    found      { true }
     period     { Mes::PeriodHelper.current }
     data do
       {
