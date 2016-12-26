@@ -17,6 +17,7 @@ module Mes
     field :type,                       type: :string
     field :query,                      type: :map
     field :video_ids,                  type: :list
+    field :missing_video_ids,          type: :list, default: []
 
     field :next_playlist_updated_at, type: :float
 
