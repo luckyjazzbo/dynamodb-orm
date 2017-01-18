@@ -5,7 +5,7 @@ RSpec.describe Mes::Playlist do
 
   described_class::TYPES.each do |type|
     describe "##{type}" do
-      xcontext 'denies saving duplicates' do
+      context 'denies saving duplicates' do
         let(:title) { SecureRandom.uuid }
         let(:tenant_id) { 't-' + SecureRandom.uuid }
         let(:invalid_playlist) { FactoryGirl.build(:playlist, title: title, tenant_id: tenant_id) }

@@ -1,6 +1,18 @@
 module Mes
   module Dynamo
     class GenericError < StandardError
+      RETRYABLE_AWS_ERRORS = [
+        ::Aws::DynamoDB::Errors::ItemCollectionSizeLimitExceededException,
+        ::Aws::DynamoDB::Errors::LimitExceededException,
+        ::Aws::DynamoDB::Errors::ProvisionedThroughputExceededException,
+        ::Aws::DynamoDB::Errors::ThrottlingException,
+        ::Aws::DynamoDB::Errors::UnrecognizedClientException
+      ].freeze
+
+      def self.error_retryable?(origial_error)
+        RETRYABLE_AWS_ERRORS.any? { |error_class| origial_error.is_a?(error_class) }
+      end
+
       def self.mes_error_for(origin_error = nil)
         error_class = mes_error_class_for(origin_error)
         return origin_error unless error_class
