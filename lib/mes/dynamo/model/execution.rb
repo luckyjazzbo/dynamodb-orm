@@ -37,7 +37,7 @@ module Mes
             if tries == 0
               raise Mes::Dynamo::GenericError.mes_error_for(origin_error)
             else
-              sleep((NUM_RETRIES - tries - 1) * 3) if sleep_on_retry
+              sleep((NUM_RETRIES - tries - 1) * 0.1) if sleep_on_retry
               retry
             end
           end
