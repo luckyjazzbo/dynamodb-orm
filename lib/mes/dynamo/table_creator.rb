@@ -68,18 +68,18 @@ module Mes
       end
 
       def table_provisioned_throughput
-        Mes::Dynamo::PROVISIONING_CONFIG
-          .fetch(env_insensitive_table_name)
-          .except('indices')
-          .symbolize_keys
+        Mes::Dynamo.provisioning_config
+                   .fetch(env_insensitive_table_name)
+                   .except('indices')
+                   .symbolize_keys
       end
 
       def index_provisioned_throughput(index_name)
-        Mes::Dynamo::PROVISIONING_CONFIG
-          .fetch(env_insensitive_table_name)
-          .fetch('indices')
-          .fetch(index_name)
-          .symbolize_keys
+        Mes::Dynamo.provisioning_config
+                   .fetch(env_insensitive_table_name)
+                   .fetch('indices')
+                   .fetch(index_name)
+                   .symbolize_keys
       end
 
       def env_insensitive_table_name

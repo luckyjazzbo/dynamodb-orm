@@ -50,10 +50,10 @@ module DynamoDBSpecHelpers
 
   def define_provisioning_for(model)
     name = model.table_name.gsub("-#{RACK_ENV}", '')
-    Mes::Dynamo::PROVISIONING_CONFIG[name] = min_provisioning
+    Mes::Dynamo.provisioning_config[name] = min_provisioning
     model.table_indices.each do |_, index|
-      Mes::Dynamo::PROVISIONING_CONFIG[name]['indices'] ||= {}
-      Mes::Dynamo::PROVISIONING_CONFIG[name]['indices'][index.name] = min_provisioning
+      Mes::Dynamo.provisioning_config[name]['indices'] ||= {}
+      Mes::Dynamo.provisioning_config[name]['indices'][index.name] = min_provisioning
     end
   end
 

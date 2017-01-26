@@ -41,23 +41,38 @@ module Mes
     autoload :Chain,      'mes/dynamo/chain'
 
     ROOT = File.expand_path('../../../', __FILE__)
-    PROVISIONING_CONFIG = YAML.load_file(
-      File.join(Dynamo::ROOT, 'config/provisioning.yml')
-    ).fetch(RACK_ENV)
+    PROVISIONING_PATH = 'config/provisioning.yml'.freeze
 
     cattr_writer :logger
 
-    def self.models
-      @models ||= Dir[File.join(ROOT, 'app/models/mes/*.rb')].map do |file|
-        model_class = File.basename(file, '.rb').classify
-        "Mes::#{model_class}".constantize
+    class << self
+      def models
+        @models ||= Dir[File.join(ROOT, 'app/models/mes/*.rb')].map do |file|
+          model_class = File.basename(file, '.rb').classify
+          "Mes::#{model_class}".constantize
+        end
       end
-    end
 
-    def self.logger
-      @logger ||= Mes::Common::LoggerWithPrefix.new(
-        Mes::Common::LoggerUtils.current_logger, '[mes-dynamo]'
-      )
+      def logger
+        @logger ||= Mes::Common::LoggerWithPrefix.new(
+          Mes::Common::LoggerUtils.current_logger, '[mes-dynamo]'
+        )
+      end
+
+      def provisioning_config
+        @provisioning_config ||= dynamo_config.deep_merge(app_config)
+      end
+
+      def dynamo_config
+        YAML.load_file(File.join(ROOT, PROVISIONING_PATH)).fetch(RACK_ENV)
+      end
+
+      def app_config
+        return {} unless defined?(App) &&
+                         App.respond_to?(:root) &&
+                         File.exist?(File.join(App.root, PROVISIONING_PATH))
+        YAML.load_file(File.join(App.root, PROVISIONING_PATH)).fetch(RACK_ENV)
+      end
     end
   end
 
