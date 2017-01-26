@@ -47,10 +47,23 @@ module Mes
 
     class << self
       def models
-        @models ||= Dir[File.join(ROOT, 'app/models/mes/*.rb')].map do |file|
+        @models ||= models_folder.map do |file|
           model_class = File.basename(file, '.rb').classify
           "Mes::#{model_class}".constantize
         end
+      end
+
+      def models_folder
+        base_models_folder + app_models_folder
+      end
+
+      def base_models_folder
+        Dir[File.join(ROOT, 'app/models/mes/*.rb')]
+      end
+
+      def app_models_folder
+        return [] unless defined?(App) && App.respond_to?(:root)
+        Dir[File.join(ROOT, 'app/models/mes/*.rb')]
       end
 
       def logger
