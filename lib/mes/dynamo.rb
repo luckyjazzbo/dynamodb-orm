@@ -63,7 +63,7 @@ module Mes
 
       def app_models_folder
         return [] unless defined?(App) && App.respond_to?(:root)
-        Dir[File.join(ROOT, 'app/models/mes/*.rb')]
+        Dir[File.join(App.root, 'app/models/mes/*.rb')]
       end
 
       def logger
