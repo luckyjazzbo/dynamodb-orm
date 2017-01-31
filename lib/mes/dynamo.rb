@@ -47,23 +47,37 @@ module Mes
 
     class << self
       def models
-        @models ||= models_folder.map do |file|
-          model_class = File.basename(file, '.rb').classify
-          "Mes::#{model_class}".constantize
+        @models ||= begin
+          classes = models_folders.map do |folder|
+            Dir["#{folder}/**/*.rb"].map do |file|
+              constantize_path(folder, file)
+            end
+          end
+          classes
+            .flatten
+            .compact
+            .select { |clazz| clazz < Mes::Dynamo::Model }
         end
       end
 
-      def models_folder
-        base_models_folder + app_models_folder
+      def constantize_path(folder, file)
+        model_name = File.basename(file, '.rb')
+        model_module = File.dirname(file).gsub(folder, '')[1..-1]
+        model_name = "#{model_module}/#{model_name}" if model_module.present?
+        model_name.classify.safe_constantize
       end
 
-      def base_models_folder
-        Dir[File.join(ROOT, 'app/models/mes/*.rb')]
+      def models_folders
+        base_models_folders + app_models_folders
       end
 
-      def app_models_folder
+      def base_models_folders
+        [File.join(ROOT, 'app/models')]
+      end
+
+      def app_models_folders
         return [] unless defined?(App) && App.respond_to?(:root)
-        Dir[File.join(App.root, 'app/models/mes/*.rb')]
+        [File.join(App.root, 'app/models')]
       end
 
       def logger
