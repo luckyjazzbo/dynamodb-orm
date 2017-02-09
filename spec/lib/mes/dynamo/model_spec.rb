@@ -214,6 +214,18 @@ RSpec.describe Mes::Dynamo::Model do
     end
   end
 
+  describe '#update_attribute!' do
+    let!(:movie) do
+      Movie.create!(id: 'v-update-attribute', title: title)
+    end
+    let(:field_value) { 'Hello from the other side' }
+
+    it 'saves new object' do
+      movie.update_attribute!(:title, field_value)
+      expect(Movie.find('v-update-attribute').attributes['title']).to eq(field_value)
+    end
+  end
+
   describe '#delete' do
     let(:movie) do
       Movie.create!(

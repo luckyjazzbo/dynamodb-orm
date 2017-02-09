@@ -27,6 +27,32 @@ module Mes
           false
         end
 
+        def update_attribute!(name, value)
+          raise Mes::Dynamo::InvalidRecord if primary_key.blank?
+
+          assign_attributes(name => value)
+          cls.run_callbacks(self, :before_save)
+
+          options = {
+            key: { cls.primary_key => primary_key },
+            expression_attribute_names: { '#name' => name },
+            expression_attribute_values: { ':value' => value },
+            update_expression: 'SET #name = :value',
+            return_values: 'NONE'
+          }
+
+          cls.client_execute(:update_item, options)
+          cls.run_callbacks(self, :after_save)
+          true
+        end
+
+        def update_attribute(name, value)
+          update_attribute!(name, value)
+        rescue InvalidRecord => e
+          logger.error("dynamodb error while updating #{primary_key} in #{cls.table_name}: #{e.message}")
+          false
+        end
+
         def save!
           cls.run_callbacks(self, :before_create) unless persisted?
           cls.run_callbacks(self, :before_save)
