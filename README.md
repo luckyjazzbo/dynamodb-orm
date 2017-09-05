@@ -1,8 +1,11 @@
-# MES Dynamo
-
-[![Build Status](https://travis-ci.com/glomex/mes-dynamo.svg?token=wTxfWxNSPNpHpdJc4pif&branch=master)](https://travis-ci.com/glomex/mes-dynamo)
-
+# Dynamo (System:MES,Squad:publisher,Type:Component)
 A simple abstraction over AWS DynamoDB service.
+
+## Technology
+* ruby
+
+## Build
+[![Build Status](https://travis-ci.com/glomex/mes-dynamo.svg?token=wTxfWxNSPNpHpdJc4pif&branch=master)](https://travis-ci.com/glomex/mes-dynamo)
 
 ## Installation
 
