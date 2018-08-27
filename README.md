@@ -1,11 +1,10 @@
 # DynamodbOrm (System:MES,Squad:publisher,Type:Component)
+[![Build Status](https://travis-ci.org/glomex/dynamodb-orm.svg?branch=master)](https://travis-ci.org/glomex/dynamodb-orm)
+
 A simple abstraction over AWS DynamoDB service.
 
 ## Technology
 * ruby
-
-## Build
-[![Build Status](https://travis-ci.org/glomex/dynamodb-orm.svg?branch=master)](https://travis-ci.org/glomex/dynamodb-orm)
 
 ## Installation
 
@@ -48,14 +47,6 @@ RSpec.describe 'A cool feature' do
       key_type: 'HASH'
     }]
   )
-end
-```
-
-### Shortcut for MES models:
-
-```ruby
-RSpec.describe 'Another cool feature' do
-  include_context 'with mes tables'
 end
 ```
 

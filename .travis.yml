@@ -1,5 +1,5 @@
-language: ruby
 sudo: required
+language: ruby
 cache:
   directories:
     - .bundle
@@ -14,13 +14,13 @@ services:
 
 install:
   - sudo apt-get update -qq
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - sudo pip install awscli --ignore-installed six
 
 before_script:
   - mkdir -p downloads
   - if [ ! -f downloads/docker-compose ]; then
-    export COMPOSE_URL="https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m`";
+    export COMPOSE_URL="https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m`";
     curl -sL $COMPOSE_URL > downloads/docker-compose;
     chmod +x downloads/docker-compose;
     fi
