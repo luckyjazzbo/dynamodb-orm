@@ -5,7 +5,7 @@ A simple abstraction over AWS DynamoDB service.
 * ruby
 
 ## Build
-[![Build Status](https://travis-ci.com/glomex/mes-dynamo.svg?token=wTxfWxNSPNpHpdJc4pif&branch=master)](https://travis-ci.com/glomex/mes-dynamo)
+[![Build Status](https://travis-ci.org/glomex/dynamodb-orm.svg?branch=master)](https://travis-ci.org/glomex/dynamodb-orm)
 
 ## Installation
 
