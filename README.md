@@ -1,4 +1,4 @@
-# Dynamo (System:MES,Squad:publisher,Type:Component)
+# DynamodbOrm (System:MES,Squad:publisher,Type:Component)
 A simple abstraction over AWS DynamoDB service.
 
 ## Technology
@@ -12,18 +12,18 @@ A simple abstraction over AWS DynamoDB service.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'mes-dynamo', git: 'git@github.com:glomex/mes-dynamo.git'
+gem 'dynamodb-orm', git: 'git@github.com:glomex/dynamodb-orm.git'
 ```
 
 ## Usage
 
 ```ruby
-class Movie < Mes::Dynamo::Model
+class Movie < DynamodbOrm::Model
   # Optional:
   table name: :sample_table, primary_key: 'custom_id'
   field :title, type: :string
 
-  include Mes::Dynamo::Timestamps
+  include DynamodbOrm::Timestamps
   # Adds created_at and updated_at with auto-assigns
 end
 ```
@@ -61,6 +61,6 @@ end
 
 ## Running tests
 ```sh
-docker-compose up
-docker-compose run app rspec
+docker-compose run app bundle install
+docker-compose run app bundle exec rspec
 ```
