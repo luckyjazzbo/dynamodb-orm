@@ -3,7 +3,7 @@ language: ruby
 cache:
   directories:
     - .bundle
-    - downloads
+    - .downloads
 
 branches:
   only:
@@ -18,14 +18,14 @@ install:
   - sudo pip install awscli --ignore-installed six
 
 before_script:
-  - mkdir -p downloads
-  - if [ ! -f downloads/docker-compose ]; then
+  - mkdir -p .downloads
+  - if [ ! -f .downloads/docker-compose ]; then
     export COMPOSE_URL="https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m`";
-    curl -sL $COMPOSE_URL > downloads/docker-compose;
-    chmod +x downloads/docker-compose;
+    curl -sL $COMPOSE_URL > .downloads/docker-compose;
+    chmod +x .downloads/docker-compose;
     fi
-  - sudo cp downloads/docker-compose /usr/local/bin
+  - sudo cp .downloads/docker-compose /usr/local/bin
 
 script:
-  - docker-compose run app bundle install
-  - docker-compose run app bundle exec rspec
+  - docker-compose run -e BUNDLE_PATH=/app/.bundle app bundle install
+  - docker-compose run -e BUNDLE_PATH=/app/.bundle app bundle exec rspec
